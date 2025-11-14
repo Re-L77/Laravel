@@ -1,0 +1,83 @@
+<!-- Materials Screen -->
+<div id="materialsScreen" class="screen-content hidden">
+    <!-- Search and Add -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="row align-items-center g-3">
+                <div class="col-md-8">
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-search"></i></span>
+                        <input type="text" class="form-control" id="searchMaterial" placeholder="Buscar material por nombre o tipo...">
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <button class="btn text-white w-100" style="background: var(--emerald-600);" data-bs-toggle="modal" data-bs-target="#addMaterialModal">
+                        <i class="fas fa-plus me-2"></i>Agregar Material
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="row g-4 mb-4">
+        <div class="col-md-4">
+            <div class="card border-success" style="background: linear-gradient(to bottom right, var(--emerald-50), var(--emerald-100));">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <p class="small mb-1" style="color: var(--emerald-700);">Total Stock Papel</p>
+                            <h4 style="color: var(--emerald-900);" id="totalPapel">0 kg</h4>
+                        </div>
+                        <i class="fas fa-file-alt fa-2x" style="color: var(--emerald-600);"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card border-primary" style="background: linear-gradient(to bottom right, #eff6ff, #dbeafe);">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <p class="small text-primary mb-1">Total Stock Plástico</p>
+                            <h4 class="text-primary" id="totalPlastico">0 kg</h4>
+                        </div>
+                        <i class="fas fa-box fa-2x text-primary"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card border-warning" style="background: linear-gradient(to bottom right, #fffbeb, #fef3c7);">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <p class="small text-warning mb-1">Total Stock Cartón</p>
+                            <h4 class="text-warning" id="totalCarton">0 kg</h4>
+                        </div>
+                        <i class="fas fa-box fa-2x text-warning"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Materials Grid -->
+    <div id="materialsGrid" class="row g-4 mb-4"></div>
+
+    <!-- Pagination -->
+    <div class="card">
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+                <div class="text-muted small" id="materialsCount">Mostrando 0 de 0 materiales</div>
+                <nav>
+                    <ul class="pagination mb-0">
+                        <li class="page-item disabled"><a class="page-link" href="#">Anterior</a></li>
+                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                        <li class="page-item disabled"><a class="page-link" href="#">Siguiente</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>

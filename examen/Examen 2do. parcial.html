@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Examen 2do. parcial</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family: "Georgia", serif;
+        background: linear-gradient(135deg, #2c1810 0%, #5a3a2e 100%);
+        background-attachment: fixed;
+        color: #f5e6d3;
+        line-height: 1.6;
+        padding: 2rem 1rem;
+      }
+      main {
+        max-width: 1000px;
+        margin: 0 auto;
+        background-color: rgba(0, 0, 0, 0.6);
+        border-radius: 10px;
+        padding: 2rem;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+      }
+      h1 {
+        font-size: 2.5rem;
+        font-weight: bold;
+        text-decoration: underline;
+        text-align: center;
+        margin-bottom: 1.5rem;
+        color: #ff9500;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+      }
+      h2 {
+        font-size: 1.8rem;
+        color: #ff9500;
+        margin-top: 1.5rem;
+        margin-bottom: 0.75rem;
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+      }
+      p {
+        margin-bottom: 1rem;
+        text-align: justify;
+      }
+      ul {
+        margin: 1rem 0 1rem 2rem;
+      }
+      li {
+        margin-bottom: 0.5rem;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 1.5rem 0;
+        background-color: rgba(30, 20, 10, 0.8);
+      }
+      th,
+      td {
+        border: 2px solid #ff9500;
+        padding: 0.75rem;
+        text-align: left;
+      }
+      th {
+        background-color: #5a3a2e;
+        font-weight: bold;
+        color: #ff9500;
+      }
+      tr:hover {
+        background-color: rgba(255, 149, 0, 0.1);
+      }
+      a {
+        color: #ffb84d;
+        text-decoration: none;
+        font-weight: bold;
+      }
+      a:hover {
+        text-decoration: underline;
+        color: #ff9500;
+      }
+      .galeria {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 1.5rem;
+        margin: 1.5rem 0;
+      }
+      .imagen-contenedor {
+        text-align: center;
+      }
+      .imagen-contenedor img {
+        max-width: 100%;
+        height: auto;
+        border: 3px solid #ff9500;
+        border-radius: 8px;
+        transition: transform 0.3s;
+      }
+      .imagen-contenedor img:hover {
+        transform: scale(1.05);
+      }
+      .imagen-desc {
+        margin-top: 0.5rem;
+        font-style: italic;
+        color: #ffb84d;
+      }
+      form {
+        background-color: rgba(90, 58, 46, 0.5);
+        padding: 1.5rem;
+        border-radius: 8px;
+        margin: 1.5rem 0;
+      }
+      fieldset {
+        margin-bottom: 1rem;
+        border: 2px solid #ff9500;
+        padding: 1rem;
+        border-radius: 5px;
+      }
+      legend {
+        color: #ff9500;
+        font-weight: bold;
+        padding: 0 0.5rem;
+      }
+      label {
+        display: block;
+        margin: 0.75rem 0 0.25rem;
+        color: #ffb84d;
+      }
+      input,
+      textarea,
+      select {
+        width: 100%;
+        padding: 0.5rem;
+        margin-bottom: 1rem;
+        border: 1px solid #ff9500;
+        border-radius: 4px;
+        background-color: #1a1a1a;
+        color: #f5e6d3;
+        font-family: Arial, sans-serif;
+      }
+      input:focus,
+      textarea:focus,
+      select:focus {
+        outline: none;
+        border-color: #ffb84d;
+        box-shadow: 0 0 8px rgba(255, 149, 0, 0.5);
+      }
+      .select-contenedor {
+        margin: 1rem 0;
+      }
+      .select-desplegable {
+        width: 100%;
+        padding: 0.5rem;
+        border: 1px solid #ff9500;
+        border-radius: 4px;
+        background-color: #1a1a1a;
+        color: #f5e6d3;
+      }
+      .botones {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        margin-top: 1rem;
+      }
+      button {
+        padding: 0.75rem 1.5rem;
+        background-color: #ff9500;
+        color: #1a1a1a;
+        border: none;
+        border-radius: 4px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+      button:hover {
+        background-color: #ffb84d;
+      }
+      .enlace-ref {
+        text-align: center;
+        margin: 2rem 0;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <!-- Título principal (grande, negrita, subrayado) -->
+      <h1>Tradiciones Día de muertos en Querétaro</h1>
+
+      <!-- Párrafo 1 -->
+      <p>
+        El Día de Muertos en Querétaro es una celebración profundamente
+        arraigada en la cultura local que combina las tradiciones prehispánicas
+        con influencias españolas coloniales. Esta festividad, que se lleva a
+        cabo el 1 y 2 de noviembre, representa una conexión especial entre los
+        vivos y los difuntos, donde la comunidad queretana honra a sus seres
+        queridos fallecidos a través de rituales ancestrales y modernos. En
+        Querétaro, la celebración adquiere características únicas debido a su
+        patrimonio cultural y su riqueza histórica como cuna de movimientos
+        independentistas.
+      </p>
+
+      <!-- Tabla -->
+      <h2>Celebraciones principales en Querétaro</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Municipio</th>
+            <th>Tradición destacada</th>
+            <th>Fecha</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Querétaro (Capital)</td>
+            <td>Ofrendas en plazas públicas y museos</td>
+            <td>1-2 de noviembre</td>
+          </tr>
+          <tr>
+            <td>Tequisquiapan</td>
+            <td>Festival de Día de Muertos con desfiles</td>
+            <td>Todo octubre-noviembre</td>
+          </tr>
+          <tr>
+            <td>San Juan del Río</td>
+            <td>Altares familiares y procesiones religiosas</td>
+            <td>1-2 de noviembre</td>
+          </tr>
+          <tr>
+            <td>Landa de Matamoros</td>
+            <td>Ceremonias en misiones franciscanas</td>
+            <td>1-2 de noviembre</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Párrafo 2 -->
+      <p>
+        Las ofrendas son el corazón de la celebración del Día de Muertos en
+        Querétaro. Estas se construyen con cuidadosa devoción en hogares,
+        iglesias, plazas y espacios públicos. Típicamente, contienen flores de
+        cempasúchil (flor tradicional mexicana), velas, fotografías de los
+        difuntos, pan de muerto, frutas, agua y alimentos favoritos del
+        fallecido. Las ofrendas no son simples decoraciones; representan un acto
+        de amor y respeto, una forma de comunicación espiritual que mantiene
+        viva la memoria de quienes han partido. En Querétaro, muchas ofrendas
+        incluyen elementos que reflejan la identidad local y la historia del
+        estado.
+      </p>
+
+      <!-- Párrafo 3 -->
+      <p>
+        Más allá de las ofrendas, las tradiciones del Día de Muertos en
+        Querétaro incluyen comidas especiales, música, bailes tradicionales y
+        procesiones religiosas. Las familias se reúnen para compartir alimentos
+        típicos como mole, pan de muerto y dulces tradicionales. En algunas
+        comunidades, especialmente en la Sierra Gorda, se mantienen costumbres
+        prehispánicas casi intactas, donde la celebración es una ocasión para
+        reflexionar sobre la vida, la muerte y el sentido comunitario. La
+        educación de las nuevas generaciones en estas tradiciones asegura que la
+        riqueza cultural del Día de Muertos en Querétaro continúe viva para las
+        futuras generaciones.
+      </p>
+
+      <!-- Lista con viñetas -->
+      <h2>Elementos característicos de la celebración</h2>
+      <ul>
+        <li>Ofrendas familiares con flores, velas y alimentos</li>
+        <li>Pan de muerto y alimentos tradicionales mexicanos</li>
+        <li>Flores de cempasúchil y nardo</li>
+        <li>Fotografías de los difuntos en lugares especiales</li>
+        <li>Procesiones religiosas y misas especiales</li>
+        <li>Música tradicional y danzas folclóricas</li>
+        <li>Visitas a panteones y cementerios</li>
+        <li>Calaveras literarias y bromas burlescas</li>
+        <li>Maquillaje de calaveras artístico</li>
+        <li>Reuniones familiares y convivio comunitario</li>
+      </ul>
+
+      <!-- Galería de imágenes (3 imágenes con descripción) -->
+      <h2>Galería: Día de Muertos en Querétaro</h2>
+      <div class="galeria">
+        <div class="imagen-contenedor">
+          <img src="./ofrenda.jpg" alt="Ofrenda tradicional día de muertos" />
+          <p class="imagen-desc">
+            Ofrenda tradicional con flores de cempasúchil, velas y fotografías
+            de difuntos
+          </p>
+        </div>
+        <div class="imagen-contenedor">
+          <img src="./pandemuerto.webp" alt="Pan de muerto tradicional" />
+          <p class="imagen-desc">
+            Pan de muerto, alimento emblemático de la celebración del Día de
+            Muertos
+          </p>
+        </div>
+        <div class="imagen-contenedor">
+          <img src="./calavera.jpg" alt="Calavera artística día de muertos" />
+          <p class="imagen-desc">
+            Maquillaje artístico de calavera, expresión moderna de la tradición
+            prehispánica
+          </p>
+        </div>
+      </div>
+
+      <!-- Enlace a página sobre el tema -->
+      <div class="enlace-ref">
+        <h2>Más información</h2>
+        <p>
+          Para conocer más sobre las tradiciones del Día de Muertos en México y
+          Querétaro,
+          <a href="" target="_blank"> haz clic aquí para leer más. </a>
+        </p>
+      </div>
+
+      <!-- Formulario de 4 preguntas -->
+      <h2>Formulario: Tu opinión sobre la celebración</h2>
+      <form>
+        <fieldset>
+          <legend>Información personal</legend>
+          <!-- Pregunta 1: input text -->
+          <label for="nombre">1- Tu nombre:</label>
+          <input
+            type="text"
+            id="nombre"
+            name="nombre"
+            placeholder="Ej. Juanito"
+            required
+          />
+
+          <!-- Pregunta 2: select (combobox) -->
+          <label for="municipio">2- ¿De cuál municipio eres?</label>
+          <select id="municipio" name="municipio">
+            <option value="">-- Selecciona --</option>
+            <optgroup label="Principales">
+              <option value="Querétaro">Querétaro (Capital)</option>
+              <option value="San Juan del Río">San Juan del Río</option>
+              <option value="Tequisquiapan">Tequisquiapan</option>
+            </optgroup>
+            <optgroup label="Otros municipios">
+              <option value="Amealco">Amealco de Bonfil</option>
+              <option value="Landa">Landa de Matamoros</option>
+              <option value="Jalpan">Jalpan de Serra</option>
+            </optgroup>
+          </select>
+
+          <!-- Pregunta 3: textarea -->
+          <label for="comentario"
+            >3- ¿Cuál es tu tradición favorita del Día de Muertos?</label
+          >
+          <textarea
+            id="comentario"
+            name="comentario"
+            rows="4"
+            placeholder="Escribe aquí..."
+            required
+          ></textarea>
+
+          <!-- Pregunta 4: datalist (input con autocompletar) -->
+          <label for="actividad"
+            >4- ¿Cuál actividad practicas en esta fecha?</label
+          >
+          <input
+            list="actividades"
+            id="actividad"
+            name="actividad"
+            placeholder="Escribe o elige..."
+          />
+          <datalist id="actividades">
+            <option value="Visitar el cementerio"></option>
+            <option value="Preparar ofrenda"></option>
+            <option value="Hacer pan de muerto"></option>
+            <option value="Usar maquillaje de calavera"></option>
+            <option value="Participar en desfiles"></option>
+          </datalist>
+        </fieldset>
+
+        <div class="botones">
+          <button type="button" onclick="mostrarMensaje()">
+            Registrar datos
+          </button>
+          <button type="reset">Limpiar formulario</button>
+        </div>
+      </form>
+
+      <!-- Lista desplegable (de 3 opciones) -->
+      <h2>Selecciona un recurso adicional</h2>
+      <div class="select-contenedor">
+        <label for="recurso">Elige un tema de interés:</label>
+        <select id="recurso" class="select-desplegable">
+          <option value="">-- Selecciona --</option>
+          <option value="historia">
+            Historia del Día de Muertos en México
+          </option>
+          <option value="recetas">
+            Recetas tradicionales de Día de Muertos
+          </option>
+          <option value="simbolos">
+            Símbolos y significados de la celebración
+          </option>
+        </select>
+      </div>
+    </main>
+
+    <script>
+      function mostrarMensaje() {
+        alert("Tus datos se han registrado");
+      }
+    </script>
+  </body>
+</html>

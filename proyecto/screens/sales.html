@@ -1,0 +1,119 @@
+<!-- Sales Screen -->
+<div id="salesScreen" class="screen-content hidden">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <!-- Form Card -->
+            <div class="card mb-4">
+                <div class="card-header text-white" style="background: linear-gradient(to right, var(--emerald-600), var(--emerald-700));">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="icon-box bg-white bg-opacity-25">
+                            <i class="fas fa-dollar-sign"></i>
+                        </div>
+                        <div>
+                            <h5 class="mb-0">Formulario de Registro de Venta</h5>
+                            <p class="small mb-0 text-white-75">Complete la información de la transacción</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body p-4">
+                    <form id="salesForm">
+                        <!-- Material Information -->
+                        <div class="border-bottom pb-4 mb-4">
+                            <h6 class="mb-3">
+                                <i class="fas fa-boxes me-2" style="color: var(--emerald-600);"></i>
+                                Información del Material
+                            </h6>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label">Material</label>
+                                    <select class="form-select" id="saleMaterial" required>
+                                        <option value="">Seleccionar material...</option>
+                                        <option value="papel">Papel Bond Blanco</option>
+                                        <option value="plastico">Plástico PET</option>
+                                        <option value="carton">Cartón Corrugado</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Tipo</label>
+                                    <div class="form-control bg-light" id="saleType">Auto-completado</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Quantity and Price -->
+                        <div class="border-bottom pb-4 mb-4">
+                            <h6 class="mb-3">
+                                <i class="fas fa-file-alt me-2" style="color: var(--emerald-600);"></i>
+                                Cantidad y Precio
+                            </h6>
+                            <div class="row g-3">
+                                <div class="col-md-4">
+                                    <label class="form-label">Cantidad (kg)</label>
+                                    <input type="number" class="form-control" id="saleQuantity" placeholder="0" min="0" step="0.01" required>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">Precio por kg</label>
+                                    <div class="form-control bg-light" id="salePrice">$0.00</div>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">Total a Pagar</label>
+                                    <div class="form-control border-success bg-success bg-opacity-10 text-success fw-bold" id="saleTotal">$0.00</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Client Information -->
+                        <div class="border-bottom pb-4 mb-4">
+                            <h6 class="mb-3">
+                                <i class="fas fa-user me-2" style="color: var(--emerald-600);"></i>
+                                Información del Cliente
+                            </h6>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label">Nombre del Cliente</label>
+                                    <input type="text" class="form-control" id="customerName" placeholder="Nombre completo o empresa" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Contacto</label>
+                                    <input type="text" class="form-control" id="customerContact" placeholder="Teléfono o email" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Notes -->
+                        <div class="mb-4">
+                            <label class="form-label">Notas u Observaciones</label>
+                            <textarea class="form-control" id="saleNotes" rows="4" placeholder="Detalles adicionales sobre la transacción..."></textarea>
+                        </div>
+
+                        <!-- Actions -->
+                        <div class="d-flex justify-content-end gap-2">
+                            <button type="button" class="btn btn-outline-secondary">
+                                <i class="fas fa-times me-2"></i>Cancelar
+                            </button>
+                            <button type="submit" class="btn text-white" style="background: var(--emerald-600);">
+                                <i class="fas fa-save me-2"></i>Registrar Venta
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Recent Sales -->
+            <div class="card">
+                <div class="card-header bg-light">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="d-flex align-items-center gap-2">
+                            <i class="fas fa-clock"></i>
+                            <h6 class="mb-0">Ventas Recientes</h6>
+                        </div>
+                        <button class="btn btn-sm btn-link" style="color: var(--emerald-600);">Ver todas</button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div id="recentSales" class="d-flex flex-column gap-3"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

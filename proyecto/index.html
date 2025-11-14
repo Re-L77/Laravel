@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EcoCycle - Sistema de Gestión de Reciclaje</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<!-- Toast Container -->
+<div class="toast-container"></div>
+
+<!-- Login Screen -->
+<div id="loginScreen" class="login-container">
+    <div class="login-card card rounded-4 overflow-hidden w-100">
+        <div class="row g-0">
+            <div class="col-lg-6 d-none d-lg-block">
+                <div class="login-image">
+                    <div class="login-content">
+                        <div class="d-flex align-items-center gap-3 mb-3">
+                            <div class="logo-box bg-white bg-opacity-25">
+                                <i class="fas fa-leaf fa-2x text-white"></i>
+                            </div>
+                            <div>
+                                <h1 class="h2 mb-0">EcoCycle</h1>
+                                <p class="mb-0 text-emerald-200">Sistema de Gestión de Reciclaje</p>
+                            </div>
+                        </div>
+                        <p class="fs-5">
+                            Administra eficientemente tus materiales reciclables y contribuye a un planeta más sostenible
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="p-5">
+                    <!-- Mobile Logo -->
+                    <div class="d-lg-none text-center mb-4">
+                        <div class="d-inline-flex align-items-center gap-3 mb-2">
+                            <div class="logo-box">
+                                <i class="fas fa-leaf fa-lg text-white"></i>
+                            </div>
+                            <h1 class="h3 mb-0" style="color: var(--emerald-800);">EcoCycle</h1>
+                        </div>
+                        <p class="text-muted">Sistema de Gestión de Reciclaje</p>
+                    </div>
+
+                    <div class="mb-4">
+                        <h2 class="h3">Iniciar Sesión</h2>
+                        <p class="text-muted">Ingresa tus credenciales para acceder al sistema</p>
+                    </div>
+
+                    <form id="loginForm">
+                        <div id="loginError" class="alert alert-danger d-none mb-3"></div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Correo Electrónico</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-envelope text-muted"></i></span>
+                                <input type="email" class="form-control" id="loginEmail" placeholder="correo@ejemplo.com" required>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Contraseña</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-lock text-muted"></i></span>
+                                <input type="password" class="form-control" id="loginPassword" placeholder="••••••••" required>
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="rememberMe">
+                                <label class="form-check-label" for="rememberMe">Recordarme</label>
+                            </div>
+                            <a href="#" class="text-decoration-none" style="color: var(--emerald-600);">¿Olvidaste tu contraseña?</a>
+                        </div>
+
+                        <button type="submit" class="btn w-100 text-white mb-3" style="background: var(--emerald-600);">
+                            <i class="fas fa-sign-in-alt me-2"></i>Iniciar Sesión
+                        </button>
+                    </form>
+
+                    <!-- Demo Credentials -->
+                    <div class="alert alert-success bg-opacity-10 border-success">
+                        <strong>Credenciales de prueba:</strong><br>
+                        Email: admin@ecocycle.com<br>
+                        Contraseña: admin123
+                    </div>
+
+                    <div class="text-center text-muted small mt-4">
+                        <p>© 2024 EcoCycle. Todos los derechos reservados.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Main App -->
+<div id="mainApp" class="hidden">
+    <!-- Sidebar -->
+    <aside id="sidebar" class="sidebar">
+        <div class="sidebar-header">
+            <div class="d-flex align-items-center gap-3">
+                <div class="logo-box">
+                    <i class="fas fa-leaf fa-lg text-white"></i>
+                </div>
+                <div>
+                    <h5 class="text-white mb-0">EcoCycle</h5>
+                    <p class="text-emerald-300 small mb-0">Sistema de Gestión</p>
+                </div>
+            </div>
+        </div>
+
+        <nav class="sidebar-nav">
+            <button class="nav-button active" data-screen="dashboard">
+                <i class="fas fa-chart-line"></i>
+                <span>Dashboard</span>
+            </button>
+            <button class="nav-button" data-screen="materials">
+                <i class="fas fa-boxes"></i>
+                <span>Gestión de Materiales</span>
+            </button>
+            <button class="nav-button" data-screen="sales">
+                <i class="fas fa-dollar-sign"></i>
+                <span>Registro de Ventas</span>
+            </button>
+        </nav>
+
+        <div class="sidebar-footer">
+            <button id="logoutBtn" class="nav-button">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Cerrar Sesión</span>
+            </button>
+            <div class="text-emerald-300 text-center small mt-3">
+                <p class="mb-0">© 2024 EcoCycle</p>
+                <p class="text-emerald-400 mb-0">Versión 1.0.0</p>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <div id="mainContent" class="main-content">
+        <!-- Header -->
+        <header class="header">
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="d-flex align-items-center gap-3">
+                    <button id="toggleSidebar" class="btn btn-light">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <div>
+                        <h4 id="headerTitle" class="mb-0">Panel de Control</h4>
+                        <p id="headerSubtitle" class="text-muted small mb-0">Vista general de métricas y estadísticas</p>
+                    </div>
+                </div>
+                <div class="d-flex align-items-center gap-3">
+                    <div class="text-end d-none d-md-block">
+                        <p class="mb-0 small fw-bold">Usuario Admin</p>
+                        <p class="mb-0 small text-muted" id="userEmail">admin@ecocycle.com</p>
+                    </div>
+                    <div class="rounded-circle text-white d-flex align-items-center justify-center fw-bold" 
+                         style="width: 40px; height: 40px; background: linear-gradient(to bottom right, var(--emerald-400), var(--emerald-600));">
+                        UA
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Content Area -->
+        <div class="content-area">
+            <!-- Dashboard Screen -->
+            <div id="dashboardScreen" class="screen-content">
+                <!-- Metric Cards -->
+                <div class="row g-4 mb-4">
+                    <div class="col-md-6 col-lg-3">
+                        <div class="card metric-card h-100" style="border-left-color: var(--emerald-500);">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <div>
+                                        <p class="text-muted small mb-1">Total Reciclado</p>
+                                        <h3 class="mb-2">8,160 <span class="fs-6 text-muted">kg</span></h3>
+                                        <div class="d-flex align-items-center gap-1" style="color: var(--emerald-600);">
+                                            <i class="fas fa-arrow-up"></i>
+                                            <span class="small">12.5% vs mes anterior</span>
+                                        </div>
+                                    </div>
+                                    <div class="icon-box" style="background: var(--emerald-100); color: var(--emerald-600);">
+                                        <i class="fas fa-recycle fa-lg"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-3">
+                        <div class="card metric-card h-100" style="border-left-color: #3b82f6;">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <div>
+                                        <p class="text-muted small mb-1">Ingresos del Mes</p>
+                                        <h3 class="mb-2">$8,500</h3>
+                                        <div class="d-flex align-items-center gap-1 text-primary">
+                                            <i class="fas fa-arrow-up"></i>
+                                            <span class="small">8.9% de incremento</span>
+                                        </div>
+                                    </div>
+                                    <div class="icon-box" style="background: #dbeafe; color: #1e40af;">
+                                        <i class="fas fa-dollar-sign fa-lg"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-3">
+                        <div class="card metric-card h-100" style="border-left-color: #f59e0b;">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <div>
+                                        <p class="text-muted small mb-1">Materiales en Stock</p>
+                                        <h3 class="mb-2">1,450 <span class="fs-6 text-muted">kg</span></h3>
+                                        <div class="d-flex align-items-center gap-1 text-warning">
+                                            <i class="fas fa-arrow-down"></i>
+                                            <span class="small">5.2% menos stock</span>
+                                        </div>
+                                    </div>
+                                    <div class="icon-box" style="background: #fef3c7; color: #92400e;">
+                                        <i class="fas fa-boxes fa-lg"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-3">
+                        <div class="card metric-card h-100" style="border-left-color: #8b5cf6;">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <div>
+                                        <p class="text-muted small mb-1">Transacciones</p>
+                                        <h3 class="mb-2">124</h3>
+                                        <div class="d-flex align-items-center gap-1" style="color: #8b5cf6;">
+                                            <i class="fas fa-arrow-up"></i>
+                                            <span class="small">15 nuevas esta semana</span>
+                                        </div>
+                                    </div>
+                                    <div class="icon-box" style="background: #ede9fe; color: #6d28d9;">
+                                        <i class="fas fa-chart-line fa-lg"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                
+
+                <!-- Image Section with Quick Access -->
+                <div class="row g-4">
+                    <div class="col-lg-8">
+                        <div class="card">
+                            <img src="https://images.unsplash.com/photo-1650182110694-3d5d2806c07f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1080" 
+                                 class="card-img-top" style="height: 250px; object-fit: cover;" alt="Compromiso Ambiental">
+                            <div class="card-body">
+                                <h5 class="card-title">Compromiso Ambiental</h5>
+                                <p class="card-text text-muted">
+                                    Con tu contribución hemos logrado reciclar más de 8 toneladas de materiales este mes, 
+                                    reduciendo significativamente el impacto ambiental y promoviendo una economía circular sostenible.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="card text-white h-100" style="background: linear-gradient(to bottom right, var(--emerald-600), var(--emerald-700));">
+                            <div class="card-body">
+                                <h5 class="card-title mb-4">Accesos Rápidos</h5>
+                                <div class="d-flex flex-column gap-3">
+                                    <button class="btn btn-light bg-white bg-opacity-10 text-white text-start quick-access" data-screen="materials">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <i class="fas fa-boxes"></i>
+                                            <div>
+                                                <p class="mb-0 small">Nuevo Material</p>
+                                                <p class="mb-0 small text-white-50">Agregar al inventario</p>
+                                            </div>
+                                        </div>
+                                    </button>
+                                    <button class="btn btn-light bg-white bg-opacity-10 text-white text-start quick-access" data-screen="sales">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <i class="fas fa-dollar-sign"></i>
+                                            <div>
+                                                <p class="mb-0 small">Registrar Venta</p>
+                                                <p class="mb-0 small text-white-50">Nueva transacción</p>
+                                            </div>
+                                        </div>
+                                    </button>
+                                    <button class="btn btn-light bg-white bg-opacity-10 text-white text-start quick-access" data-screen="dashboard">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <i class="fas fa-chart-line"></i>
+                                            <div>
+                                                <p class="mb-0 small">Ver Reportes</p>
+                                                <p class="mb-0 small text-white-50">Análisis detallado</p>
+                                            </div>
+                                        </div>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Materials Screen -->
+            <div id="materialsScreen" class="screen-content hidden">
+                <!-- Search and Add -->
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <div class="row align-items-center g-3">
+                            <div class="col-md-8">
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-search"></i></span>
+                                    <input type="text" class="form-control" id="searchMaterial" placeholder="Buscar material por nombre o tipo...">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <button class="btn text-white w-100" style="background: var(--emerald-600);" data-bs-toggle="modal" data-bs-target="#addMaterialModal">
+                                    <i class="fas fa-plus me-2"></i>Agregar Material
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Stats Cards -->
+                <div class="row g-4 mb-4">
+                    <div class="col-md-4">
+                        <div class="card border-success" style="background: linear-gradient(to bottom right, var(--emerald-50), var(--emerald-100));">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <p class="small mb-1" style="color: var(--emerald-700);">Total Stock Papel</p>
+                                        <h4 style="color: var(--emerald-900);" id="totalPapel">0 kg</h4>
+                                    </div>
+                                    <i class="fas fa-file-alt fa-2x" style="color: var(--emerald-600);"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card border-primary" style="background: linear-gradient(to bottom right, #eff6ff, #dbeafe);">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <p class="small text-primary mb-1">Total Stock Plástico</p>
+                                        <h4 class="text-primary" id="totalPlastico">0 kg</h4>
+                                    </div>
+                                    <i class="fas fa-box fa-2x text-primary"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card border-warning" style="background: linear-gradient(to bottom right, #fffbeb, #fef3c7);">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <p class="small text-warning mb-1">Total Stock Cartón</p>
+                                        <h4 class="text-warning" id="totalCarton">0 kg</h4>
+                                    </div>
+                                    <i class="fas fa-box fa-2x text-warning"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Materials Grid -->
+                <div id="materialsGrid" class="row g-4 mb-4"></div>
+
+                <!-- Pagination -->
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+                            <div class="text-muted small" id="materialsCount">Mostrando 0 de 0 materiales</div>
+                            <nav>
+                                <ul class="pagination mb-0">
+                                    <li class="page-item disabled"><a class="page-link" href="#">Anterior</a></li>
+                                    <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                                    <li class="page-item disabled"><a class="page-link" href="#">Siguiente</a></li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sales Screen -->
+            <div id="salesScreen" class="screen-content hidden">
+                <div class="row justify-content-center">
+                    <div class="col-lg-10">
+                        <!-- Form Card -->
+                        <div class="card mb-4">
+                            <div class="card-header text-white" style="background: linear-gradient(to right, var(--emerald-600), var(--emerald-700));">
+                                <div class="d-flex align-items-center gap-3">
+                                    <div class="icon-box bg-white bg-opacity-25">
+                                        <i class="fas fa-dollar-sign"></i>
+                                    </div>
+                                    <div>
+                                        <h5 class="mb-0">Formulario de Registro de Venta</h5>
+                                        <p class="small mb-0 text-white-75">Complete la información de la transacción</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body p-4">
+                                <form id="salesForm">
+                                    <!-- Material Information -->
+                                    <div class="border-bottom pb-4 mb-4">
+                                        <h6 class="mb-3">
+                                            <i class="fas fa-boxes me-2" style="color: var(--emerald-600);"></i>
+                                            Información del Material
+                                        </h6>
+                                        <div class="row g-3">
+                                            <div class="col-md-6">
+                                                <label class="form-label">Material</label>
+                                                <select class="form-select" id="saleMaterial" required>
+                                                    <option value="">Seleccionar material...</option>
+                                                    <option value="papel">Papel Bond Blanco</option>
+                                                    <option value="plastico">Plástico PET</option>
+                                                    <option value="carton">Cartón Corrugado</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label">Tipo</label>
+                                                <div class="form-control bg-light" id="saleType">Auto-completado</div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Quantity and Price -->
+                                    <div class="border-bottom pb-4 mb-4">
+                                        <h6 class="mb-3">
+                                            <i class="fas fa-file-alt me-2" style="color: var(--emerald-600);"></i>
+                                            Cantidad y Precio
+                                        </h6>
+                                        <div class="row g-3">
+                                            <div class="col-md-4">
+                                                <label class="form-label">Cantidad (kg)</label>
+                                                <input type="number" class="form-control" id="saleQuantity" placeholder="0" min="0" step="0.01" required>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label class="form-label">Precio por kg</label>
+                                                <div class="form-control bg-light" id="salePrice">$0.00</div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label class="form-label">Total a Pagar</label>
+                                                <div class="form-control border-success bg-success bg-opacity-10 text-success fw-bold" id="saleTotal">$0.00</div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Client Information -->
+                                    <div class="border-bottom pb-4 mb-4">
+                                        <h6 class="mb-3">
+                                            <i class="fas fa-user me-2" style="color: var(--emerald-600);"></i>
+                                            Información del Cliente
+                                        </h6>
+                                        <div class="row g-3">
+                                            <div class="col-md-6">
+                                                <label class="form-label">Nombre del Cliente</label>
+                                                <input type="text" class="form-control" id="customerName" placeholder="Nombre completo o empresa" required>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label">Contacto</label>
+                                                <input type="text" class="form-control" id="customerContact" placeholder="Teléfono o email" required>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Notes -->
+                                    <div class="mb-4">
+                                        <label class="form-label">Notas u Observaciones</label>
+                                        <textarea class="form-control" id="saleNotes" rows="4" placeholder="Detalles adicionales sobre la transacción..."></textarea>
+                                    </div>
+
+                                    <!-- Actions -->
+                                    <div class="d-flex justify-content-end gap-2">
+                                        <button type="button" class="btn btn-outline-secondary">
+                                            <i class="fas fa-times me-2"></i>Cancelar
+                                        </button>
+                                        <button type="submit" class="btn text-white" style="background: var(--emerald-600);">
+                                            <i class="fas fa-save me-2"></i>Registrar Venta
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+                        <!-- Recent Sales -->
+                        <div class="card">
+                            <div class="card-header bg-light">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <i class="fas fa-clock"></i>
+                                        <h6 class="mb-0">Ventas Recientes</h6>
+                                    </div>
+                                    <button class="btn btn-sm btn-link" style="color: var(--emerald-600);">Ver todas</button>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div id="recentSales" class="d-flex flex-column gap-3"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add Material Modal -->
+<div class="modal fade" id="addMaterialModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Agregar Nuevo Material</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form id="addMaterialForm">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Nombre del Material</label>
+                        <input type="text" class="form-control" id="addMaterialName" placeholder="Ej: Papel Bond A4" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Tipo</label>
+                        <select class="form-select" id="addMaterialType" required>
+                            <option value="Papel">Papel</option>
+                            <option value="Plástico">Plástico</option>
+                            <option value="Cartón">Cartón</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Stock (kg)</label>
+                        <input type="number" class="form-control" id="addMaterialStock" placeholder="0" min="0" step="0.01" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Precio por kg ($)</label>
+                        <input type="number" class="form-control" id="addMaterialPrice" placeholder="0.00" min="0" step="0.01" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn text-white" style="background: var(--emerald-600);">Agregar Material</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Material Modal -->
+<div class="modal fade" id="editMaterialModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Editar Material</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form id="editMaterialForm">
+                <input type="hidden" id="editMaterialId">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Nombre del Material</label>
+                        <input type="text" class="form-control" id="editMaterialName" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Tipo</label>
+                        <select class="form-select" id="editMaterialType" required>
+                            <option value="Papel">Papel</option>
+                            <option value="Plástico">Plástico</option>
+                            <option value="Cartón">Cartón</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Stock (kg)</label>
+                        <input type="number" class="form-control" id="editMaterialStock" min="0" step="0.01" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Precio por kg ($)</label>
+                        <input type="number" class="form-control" id="editMaterialPrice" min="0" step="0.01" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn text-white" style="background: var(--emerald-600);">Guardar Cambios</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Material Modal -->
+<div class="modal fade" id="deleteMaterialModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">¿Estás seguro?</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>Esta acción no se puede deshacer. El material "<span id="deleteMaterialName"></span>" será eliminado permanentemente del inventario.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Eliminar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap Bundle with Popper -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.js"></script>
+
+<!-- Modules -->
+<script src="js/modules/auth.js"></script>
+<script src="js/modules/charts.js"></script>
+<script src="js/modules/materials.js"></script>
+<script src="js/modules/sales.js"></script>
+<script src="js/modules/ui.js"></script>
+
+<!-- Main Application -->
+<script src="js/main.js"></script>
+
+</body>
+</html>

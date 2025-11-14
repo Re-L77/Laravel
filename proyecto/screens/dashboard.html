@@ -1,0 +1,176 @@
+<!-- Dashboard Screen -->
+<div id="dashboardScreen" class="screen-content">
+    <!-- Metric Cards -->
+    <div class="row g-4 mb-4">
+        <div class="col-md-6 col-lg-3">
+            <div class="card metric-card h-100" style="border-left-color: var(--emerald-500);">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <p class="text-muted small mb-1">Total Reciclado</p>
+                            <h3 class="mb-2">8,160 <span class="fs-6 text-muted">kg</span></h3>
+                            <div class="d-flex align-items-center gap-1" style="color: var(--emerald-600);">
+                                <i class="fas fa-arrow-up"></i>
+                                <span class="small">12.5% vs mes anterior</span>
+                            </div>
+                        </div>
+                        <div class="icon-box" style="background: var(--emerald-100); color: var(--emerald-600);">
+                            <i class="fas fa-recycle fa-lg"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-lg-3">
+            <div class="card metric-card h-100" style="border-left-color: #3b82f6;">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <p class="text-muted small mb-1">Ingresos del Mes</p>
+                            <h3 class="mb-2">$8,500</h3>
+                            <div class="d-flex align-items-center gap-1 text-primary">
+                                <i class="fas fa-arrow-up"></i>
+                                <span class="small">8.9% de incremento</span>
+                            </div>
+                        </div>
+                        <div class="icon-box" style="background: #dbeafe; color: #1e40af;">
+                            <i class="fas fa-dollar-sign fa-lg"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-lg-3">
+            <div class="card metric-card h-100" style="border-left-color: #f59e0b;">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <p class="text-muted small mb-1">Materiales en Stock</p>
+                            <h3 class="mb-2">1,450 <span class="fs-6 text-muted">kg</span></h3>
+                            <div class="d-flex align-items-center gap-1 text-warning">
+                                <i class="fas fa-arrow-down"></i>
+                                <span class="small">5.2% menos stock</span>
+                            </div>
+                        </div>
+                        <div class="icon-box" style="background: #fef3c7; color: #92400e;">
+                            <i class="fas fa-boxes fa-lg"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-lg-3">
+            <div class="card metric-card h-100" style="border-left-color: #8b5cf6;">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <p class="text-muted small mb-1">Transacciones</p>
+                            <h3 class="mb-2">124</h3>
+                            <div class="d-flex align-items-center gap-1" style="color: #8b5cf6;">
+                                <i class="fas fa-arrow-up"></i>
+                                <span class="small">15 nuevas esta semana</span>
+                            </div>
+                        </div>
+                        <div class="icon-box" style="background: #ede9fe; color: #6d28d9;">
+                            <i class="fas fa-chart-line fa-lg"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts Section -->
+    <div class="row g-4 mb-4">
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Materiales Reciclados por Mes</h5>
+                </div>
+                <div class="card-body" style="height: 300px;">
+                    <canvas id="barChart" height="250"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Distribución de Materiales</h5>
+                </div>
+                <div class="card-body" style="height: 300px;">
+                    <canvas id="pieChart" height="250"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Line Chart -->
+    <div class="row g-4 mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Evolución de Ingresos</h5>
+                </div>
+                <div class="card-body" style="height: 200px;">
+                    <canvas id="lineChart" height="80"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Image Section with Quick Access -->
+    <div class="row g-4">
+        <div class="col-lg-8">
+            <div class="card">
+                <img src="https://images.unsplash.com/photo-1650182110694-3d5d2806c07f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1080" 
+                     class="card-img-top" style="height: 250px; object-fit: cover;" alt="Compromiso Ambiental">
+                <div class="card-body">
+                    <h5 class="card-title">Compromiso Ambiental</h5>
+                    <p class="card-text text-muted">
+                        Con tu contribución hemos logrado reciclar más de 8 toneladas de materiales este mes, 
+                        reduciendo significativamente el impacto ambiental y promoviendo una economía circular sostenible.
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="card text-white h-100" style="background: linear-gradient(to bottom right, var(--emerald-600), var(--emerald-700));">
+                <div class="card-body">
+                    <h5 class="card-title mb-4">Accesos Rápidos</h5>
+                    <div class="d-flex flex-column gap-3">
+                        <button class="btn btn-light bg-white bg-opacity-10 text-white text-start quick-access" data-screen="materials">
+                            <div class="d-flex align-items-center gap-3">
+                                <i class="fas fa-boxes"></i>
+                                <div>
+                                    <p class="mb-0 small">Nuevo Material</p>
+                                    <p class="mb-0 small text-white-50">Agregar al inventario</p>
+                                </div>
+                            </div>
+                        </button>
+                        <button class="btn btn-light bg-white bg-opacity-10 text-white text-start quick-access" data-screen="sales">
+                            <div class="d-flex align-items-center gap-3">
+                                <i class="fas fa-dollar-sign"></i>
+                                <div>
+                                    <p class="mb-0 small">Registrar Venta</p>
+                                    <p class="mb-0 small text-white-50">Nueva transacción</p>
+                                </div>
+                            </div>
+                        </button>
+                        <button class="btn btn-light bg-white bg-opacity-10 text-white text-start quick-access" data-screen="dashboard">
+                            <div class="d-flex align-items-center gap-3">
+                                <i class="fas fa-chart-line"></i>
+                                <div>
+                                    <p class="mb-0 small">Ver Reportes</p>
+                                    <p class="mb-0 small text-white-50">Análisis detallado</p>
+                                </div>
+                            </div>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
