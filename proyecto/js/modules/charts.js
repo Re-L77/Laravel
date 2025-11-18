@@ -1,9 +1,11 @@
 // Charts Module
 const Charts = (() => {
     const initialize = () => {
-        initializeBarChart();
-        initializePieChart();
-        initializeLineChart();
+        // Verificar que los canvas existan antes de crear gráficos
+        if (document.getElementById('barChart')) initializeBarChart();
+        if (document.getElementById('pieChart')) initializePieChart();
+        if (document.getElementById('lineChart')) initializeLineChart();
+        if (document.getElementById('donutChart')) initializeDonutChart();
     };
 
     const initializeBarChart = () => {
@@ -29,6 +31,11 @@ const Charts = (() => {
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'top'
+                    }
+                },
                 scales: {
                     y: {
                         beginAtZero: true
@@ -46,12 +53,19 @@ const Charts = (() => {
                 labels: ['Papel', 'Plástico', 'Cartón'],
                 datasets: [{
                     data: [3340, 2640, 2180],
-                    backgroundColor: ['#10b981', '#3b82f6', '#f59e0b']
+                    backgroundColor: ['#10b981', '#3b82f6', '#f59e0b'],
+                    borderColor: '#fff',
+                    borderWidth: 2
                 }]
             },
             options: {
                 responsive: true,
-                maintainAspectRatio: false
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
             }
         });
     };
@@ -63,20 +77,51 @@ const Charts = (() => {
             data: {
                 labels: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun'],
                 datasets: [{
-                    label: 'Ingresos',
+                    label: 'Ingresos ($)',
                     data: [5200, 6100, 5800, 7200, 7800, 8500],
                     borderColor: '#10b981',
                     backgroundColor: 'rgba(16, 185, 129, 0.1)',
                     tension: 0.4,
-                    fill: true
+                    fill: true,
+                    borderWidth: 2
                 }]
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'top'
+                    }
+                },
                 scales: {
                     y: {
                         beginAtZero: true
+                    }
+                }
+            }
+        });
+    };
+
+    const initializeDonutChart = () => {
+        const donutCtx = document.getElementById('donutChart').getContext('2d');
+        new Chart(donutCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Papel', 'Plástico', 'Cartón'],
+                datasets: [{
+                    data: [1450, 650, 350],
+                    backgroundColor: ['#10b981', '#3b82f6', '#f59e0b'],
+                    borderColor: '#fff',
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
                     }
                 }
             }

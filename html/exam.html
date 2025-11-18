@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diagnóstico Integral de Programación (30 Reactivos)</title>
+    <style>
+        :root {
+            --bg: #1e1e2e;
+            --text: #cdd6f4;
+            --accent: #89b4fa;
+            --correct: #a6e3a1;
+            --wrong: #f38ba8;
+            --code-bg: #313244;
+            --card-bg: #181825;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        h1,
+        h2 {
+            color: var(--accent);
+            text-align: center;
+        }
+
+        .category-title {
+            margin-top: 40px;
+            border-bottom: 1px solid #45475a;
+            padding-bottom: 5px;
+            color: #f9e2af;
+        }
+
+        .question-card {
+            background: var(--card-bg);
+            border: 1px solid #45475a;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 15px;
+        }
+
+        pre {
+            background: var(--code-bg);
+            padding: 12px;
+            border-radius: 6px;
+            overflow-x: auto;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.95rem;
+            color: #fab387;
+            border-left: 4px solid var(--accent);
+        }
+
+        label {
+            display: flex;
+            align-items: center;
+            margin: 8px 0;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 4px;
+            transition: 0.2s;
+        }
+
+        label:hover {
+            background: #313244;
+        }
+
+        input[type="radio"] {
+            margin-right: 12px;
+            transform: scale(1.2);
+            accent-color: var(--accent);
+        }
+
+        button {
+            background: var(--accent);
+            color: #11111b;
+            border: none;
+            padding: 15px 30px;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            display: block;
+            width: 100%;
+            margin: 30px 0;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: #b4befe;
+        }
+
+        .feedback {
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 6px;
+            display: none;
+            font-size: 0.95em;
+        }
+
+        .correct {
+            border-left: 4px solid var(--correct);
+            background: rgba(166, 227, 161, 0.1);
+        }
+
+        .incorrect {
+            border-left: 4px solid var(--wrong);
+            background: rgba(243, 139, 168, 0.1);
+        }
+
+        #result {
+            font-size: 1.4em;
+            text-align: center;
+            font-weight: bold;
+            padding: 20px;
+            background: var(--card-bg);
+            border-radius: 8px;
+            display: none;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+            margin-top: 20px;
+            font-size: 0.8em;
+        }
+
+        .stat-box {
+            background: #313244;
+            padding: 10px;
+            border-radius: 4px;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Test</h1>
+    <p style="text-align:center; opacity: 0.8;">C / Java / Lógica Algorítmica</p>
+
+    <form id="quizForm"></form>
+
+    <button type="button" onclick="checkAnswers()">FINALIZAR Y EVALUAR</button>
+    <div id="result"></div>
+
+    <script>
+        const questions = [
+            // --- SECCIÓN 1: CONTROL DE FLUJO ---
+            { cat: "Lógica", code: `boolean x = true;\nboolean y = false;\nboolean z = (x || y) && x && !y;\n// ¿Valor de z?`, options: ["true", "false", "null", "Error"], ans: 0, exp: "Correcto. (True || False) -> True. True && True -> True. !y es True. Todo es True." },
+            { cat: "Lógica", code: `int a = 10;\nif(a = 5) print("A");\nelse print("B");\n// En C/C++ (no Java)`, options: ["A", "B", "Error", "Ninguna"], ans: 0, exp: "Correcto. En C, 'a=5' es una ASIGNACIÓN que devuelve 5. Como 5 es distinto de 0, es VERDADERO." },
+            { cat: "Lógica", code: `int x = 0;\nswitch(x) {\n  case 0: print("0");\n  case 1: print("1"); break;\n  default: print("Def");\n}`, options: ["0", "01", "01Def", "Error"], ans: 1, exp: "Correcto. Falta el 'break' en el case 0, así que ocurre el 'Fall-through' y ejecuta también el case 1." },
+            { cat: "Lógica", code: `int a = 5, b = 10;\nint res = (a > b) ? a : b;\n// ¿Valor de res?`, options: ["5", "10", "True", "False"], ans: 1, exp: "Correcto. Operador ternario. Como 5 > 10 es falso, retorna el segundo valor (b)." },
+            { cat: "Lógica", code: `// Cortocircuito\nint x = 10;\nif(x > 20 && ++x > 10) {}\nprint(x);`, options: ["10", "11", "Error", "20"], ans: 0, exp: "Correcto. La primera condición (x>20) falla, el AND se detiene y ++x JAMÁS se ejecuta." },
+
+            // --- SECCIÓN 2: CICLOS ---
+            { cat: "Ciclos", code: `int i = 0;\nfor( ; i < 3; ) i++;\nprint(i);`, options: ["2", "3", "Error", "Bucle Infinito"], ans: 1, exp: "Correcto. Es válido omitir partes del for. 'i' llega a 3, la condición falla y sale." },
+            { cat: "Ciclos", code: `int i = 0;\ndo { i++; } while(i < 0);\nprint(i);`, options: ["0", "1", "Error", "Bucle infinito"], ans: 1, exp: "Correcto. El do-while garantiza al menos UNA ejecución antes de evaluar." },
+            { cat: "Ciclos", code: `// ¿Qué imprime?\nfor(int i=0; i<5; i+=2) {\n  if(i==2) continue;\n  print(i);\n}`, options: ["0 2 4", "0 4", "0 2", "Error"], ans: 1, exp: "Correcto. i=0 (imprime), i=2 (continue salta impresión), i=4 (imprime)." },
+            { cat: "Ciclos", code: `int c = 0;\nwhile(c++ < 3) print(c);`, options: ["0 1 2", "1 2 3", "1 2", "0 1 2 3"], ans: 1, exp: "Correcto. Primero se evalúa (0<3 es true), luego incrementa a 1, luego imprime 1. Se repite hasta c=3." },
+            { cat: "Ciclos", code: `for(int i=0; i<3; i++);\nprint(i); // En Java (variable dentro del for)`, options: ["3", "2", "0", "Error de compilación"], ans: 3, exp: "Correcto. En Java, el alcance (scope) de 'i' se limita al bucle for. Fuera no existe." },
+
+            // --- SECCIÓN 3: TIPOS Y OPERADORES ---
+            { cat: "Tipos", code: `double d = 0.1 + 0.2;\nboolean b = (d == 0.3);\n// ¿Valor de b?`, options: ["true", "false", "Casi true", "Error"], ans: 1, exp: "Correcto. Punto flotante IEEE 754: 0.1 + 0.2 suele ser 0.30000000000000004." },
+            { cat: "Tipos", code: `int x = 2147483647; // Max Int\nx = x + 1;`, options: ["2147483648", "-2147483648", "Error", "0"], ans: 1, exp: "Correcto. Overflow (Desbordamiento). Da la vuelta al valor mínimo negativo." },
+            { cat: "Tipos", code: `char c = 'A' + 1;\nprint(c);`, options: ["A1", "B", "Error", "66"], ans: 1, exp: "Correcto. 'A' es 65 ASCII. +1 es 66, que equivale al char 'B'." },
+            { cat: "Tipos", code: `int x = 5 >> 1;\n// Desplazamiento de bits`, options: ["5", "2", "10", "2.5"], ans: 1, exp: "Correcto. 5 es 101 binario. Desplazar a derecha elimina el último bit -> 10 (que es 2 decimal)." },
+            { cat: "Tipos", code: `int x = 10;\ndouble y = x / 4;\nprint(y);`, options: ["2.5", "2.0", "2", "Error"], ans: 1, exp: "Correcto. División entera int/int (10/4 = 2). LUEGO se convierte a double (2.0)." },
+
+            // --- SECCIÓN 4: MEMORIA Y REFERENCIAS ---
+            { cat: "Memoria", code: `// C Punteros\nint x = 10;\nint *p = &x;\n*p = 20;\nprint(x);`, options: ["10", "20", "Dirección memoria", "Error"], ans: 1, exp: "Correcto. *p desreferencia y modifica el valor en la dirección de x." },
+            { cat: "Memoria", code: `// Java Objetos\nString s = null;\nif(s != null & s.length() > 0) ...`, options: ["Seguro", "NullPointerException", "False", "True"], ans: 1, exp: "Correcto. Usaste '&' (bitwise) en vez de '&&'. Evalúa AMBOS lados. s.length() lanza excepción." },
+            { cat: "Memoria", code: `void f(int n) { n = 0; }\n// main:\nint a = 10; f(a);\nprint(a);`, options: ["0", "10", "Null", "Error"], ans: 1, exp: "Correcto. Paso por VALOR en primitivos. La copia local cambia, la original no." },
+            { cat: "Memoria", code: `// Stack vs Heap\n// ¿Dónde se guarda un objeto creado con 'new'?`, options: ["Stack (Pila)", "Heap (Montículo)", "Registro CPU", "Disco"], ans: 1, exp: "Correcto. Objetos dinámicos van al Heap. Las referencias locales van al Stack." },
+            { cat: "Memoria", code: `// C Punteros\nint arr[3];\n*(arr + 1) = 5;\n// Equivalente a:`, options: ["arr[0]=5", "arr[1]=5", "arr[2]=5", "Error"], ans: 1, exp: "Correcto. arr es la dirección base. +1 avanza una posición del tipo dato. Es arr[1]." },
+
+            // --- SECCIÓN 5: ARRAYS Y STRINGS ---
+            { cat: "Datos", code: `String a = "Hola";\nString b = "Hola";\nprint(a == b); // En Java`, options: ["true", "false", "Error", "Depende"], ans: 0, exp: "Correcto. String Pool: Java reutiliza la misma instancia para literales idénticos." },
+            { cat: "Datos", code: `String a = new String("Hola");\nString b = new String("Hola");\nprint(a == b);`, options: ["true", "false", "Error", "Depende"], ans: 1, exp: "Correcto. 'new' fuerza la creación de objetos distintos en memoria. Sus direcciones son diferentes." },
+            { cat: "Datos", code: `int[][] m = {{1,2},{3,4}};\nprint(m[1][1]);`, options: ["1", "2", "3", "4"], ans: 3, exp: "Correcto. Fila índice 1 ({3,4}), Columna índice 1 (4)." },
+            { cat: "Datos", code: `int[] arr = new int[5];\nprint(arr[5]);`, options: ["0", "null", "IndexOutOfBounds", "Basura"], ans: 2, exp: "Correcto. Índices van de 0 a 4. El 5 está fuera." },
+            { cat: "Datos", code: `// String Inmutable\nString s = "Java";\ns.toUpperCase();\nprint(s);`, options: ["JAVA", "Java", "java", "Error"], ans: 1, exp: "Correcto. toUpperCase() retorna uno nuevo, no modifica el original. 's' sigue siendo 'Java'." },
+
+            // --- SECCIÓN 6: POO Y ESTRUCTURA ---
+            { cat: "POO", code: `class A { static int x=0; A(){x++;} }\nnew A(); new A();\nprint(A.x);`, options: ["0", "1", "2", "Error"], ans: 2, exp: "Correcto. Static es compartido por todas las instancias." },
+            { cat: "POO", code: `class P { void saludo(){print("P");} }\nclass H extends P { void saludo(){print("H");} }\nP obj = new H();\nobj.saludo();`, options: ["P", "H", "Error", "PH"], ans: 1, exp: "Correcto. Polimorfismo: Se ejecuta el método del OBJETO real (H), no el de la variable (P)." },
+            { cat: "POO", code: `private int x;\n// ¿Desde dónde es accesible x?`, options: ["Cualquier clase", "Subclases", "Mismo paquete", "Solo su clase"], ans: 3, exp: "Correcto. Private es el nivel más restrictivo." },
+            { cat: "POO", code: `// Constructores\nclass A { A(){print("A");} }\nclass B extends A { B(){print("B");} }\nnew B();`, options: ["B", "A", "AB", "BA"], ans: 2, exp: "Correcto. Primero se ejecuta el constructor del Padre (A), luego el del Hijo (B)." },
+            { cat: "POO", code: `abstract class X { abstract void f(); }\nnew X();`, options: ["Crea objeto X", "Error compilación", "null", "0"], ans: 1, exp: "Correcto. No se pueden instanciar clases abstractas." }
+        ];
+
+        const form = document.getElementById('quizForm');
+        let currentCat = "";
+
+        questions.forEach((q, index) => {
+            if (q.cat !== currentCat) {
+                const title = document.createElement('h2');
+                title.className = "category-title";
+                title.innerText = `Módulo: ${q.cat}`;
+                form.appendChild(title);
+                currentCat = q.cat;
+            }
+
+            const card = document.createElement('div');
+            card.className = 'question-card';
+
+            let optionsHtml = '';
+            q.options.forEach((opt, i) => {
+                optionsHtml += `
+                    <label>
+                        <input type="radio" name="q${index}" value="${i}">
+                        <span>${opt}</span>
+                    </label>`;
+            });
+
+            card.innerHTML = `
+                <div><strong>${index + 1}.</strong></div>
+                <pre>${q.code}</pre>
+                <div class="options">${optionsHtml}</div>
+                <div class="feedback" id="feedback-${index}"></div>
+            `;
+            form.appendChild(card);
+        });
+
+        function checkAnswers() {
+            let score = 0;
+            let catScores = {};
+            let catCounts = {};
+            let resultsDetails = [];
+
+            questions.forEach((q, index) => {
+                if (!catScores[q.cat]) { catScores[q.cat] = 0; catCounts[q.cat] = 0; }
+                catCounts[q.cat]++;
+
+                const selected = document.querySelector(`input[name="q${index}"]:checked`);
+                const feedbackDiv = document.getElementById(`feedback-${index}`);
+
+                const userAnswer = selected ? q.options[parseInt(selected.value)] : null;
+                const correctAnswer = q.options[q.ans];
+                const isCorrect = selected ? (parseInt(selected.value) === q.ans) : false;
+
+                // Record detailed result for export
+                resultsDetails.push({
+                    index: index + 1,
+                    category: q.cat,
+                    code: q.code,
+                    userAnswer: userAnswer,
+                    correctAnswer: correctAnswer,
+                    isCorrect: isCorrect,
+                    explanation: q.exp
+                });
+
+                if (!selected) {
+                    feedbackDiv.className = 'feedback incorrect';
+                    feedbackDiv.innerHTML = "⚠️ Sin responder.";
+                    feedbackDiv.style.display = 'block';
+                } else if (isCorrect) {
+                    score++;
+                    catScores[q.cat]++;
+                    feedbackDiv.className = 'feedback correct';
+                    feedbackDiv.innerHTML = "✅ " + q.exp;
+                    feedbackDiv.style.display = 'block';
+                } else {
+                    feedbackDiv.className = 'feedback incorrect';
+                    feedbackDiv.innerHTML = `❌ Incorrecto. Respuesta: <strong>${correctAnswer}</strong><br>${q.exp}`;
+                    feedbackDiv.style.display = 'block';
+                }
+            });
+
+            const resultDiv = document.getElementById('result');
+            resultDiv.style.display = 'block';
+
+            let breakdown = "";
+            for (const cat in catScores) {
+                const percent = Math.round((catScores[cat] / catCounts[cat]) * 100);
+                let color = percent > 70 ? "#a6e3a1" : (percent > 40 ? "#f9e2af" : "#f38ba8");
+                breakdown += `<div class='stat-box' style='border: 1px solid ${color}'>
+                    <div style='color:${color}; font-weight:bold'>${cat}</div>
+                    ${catScores[cat]}/${catCounts[cat]} (${percent}%)
+                </div>`;
+            }
+
+            const summaryText = `${score} / ${questions.length} - ${score >= 24 ? "Nivel Sólido" : (score >= 15 ? "Necesita Refuerzo" : "Reinicio Recomendado")}`;
+
+            // Data object for export
+            const exportData = {
+                timestamp: new Date().toISOString(),
+                score: score,
+                total: questions.length,
+                summary: summaryText,
+                byCategory: Object.keys(catScores).map(cat => ({
+                    category: cat,
+                    correct: catScores[cat],
+                    total: catCounts[cat],
+                    percent: Math.round((catScores[cat] / catCounts[cat]) * 100)
+                })),
+                details: resultsDetails
+            };
+
+            // Render result + export buttons
+            resultDiv.innerHTML = `
+                <div style="font-size: 2em; margin-bottom: 10px;">Calificación: ${score} / ${questions.length}</div>
+                <div style="margin-bottom:8px">${score >= 24 ? "🏆 Nivel Sólido" : (score >= 15 ? "⚠️ Necesita Refuerzo" : "🛑 Reinicio RecomendADO")}</div>
+                <div class="stats-grid">${breakdown}</div>
+                <div style="display:flex; gap:8px; margin-top:16px; flex-wrap:wrap">
+                    <button type="button" onclick="exportJSON()">Exportar JSON</button>
+                    <button type="button" onclick="exportCSV()">Exportar CSV</button>
+                    <button type="button" onclick="copyResults()">Copiar JSON</button>
+                    <button type="button" onclick="window.print()">Imprimir</button>
+                </div>
+                <p style="margin-top:20px; font-weight:normal; font-size:0.8em">También puedes descargar los resultados (JSON/CSV), copiarlos al portapapeles o imprimir esta página para tu registro.</p>
+            `;
+
+            // Attach export data to window for the export functions
+            window._examExportData = exportData;
+
+            window.scrollTo(0, document.body.scrollHeight);
+        }
+
+        // Export helpers
+        function downloadBlob(filename, content, mime) {
+            const blob = new Blob([content], { type: mime });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            URL.revokeObjectURL(url);
+        }
+
+        function exportJSON() {
+            try {
+                const json = JSON.stringify(window._examExportData, null, 2);
+                downloadBlob('exam-results.json', json, 'application/json');
+                alert('Exportado JSON: exam-results.json');
+            } catch (err) {
+                alert('Error al exportar JSON: ' + err.message);
+            }
+        }
+
+        function exportCSV() {
+            try {
+                const data = window._examExportData;
+                const headers = ['#', 'category', 'userAnswer', 'correctAnswer', 'isCorrect', 'explanation'];
+                const rows = data.details.map(d => {
+                    // Escape double quotes and wrap in quotes
+                    const esc = v => v === null ? '' : (`"${String(v).replace(/"/g, '""')}"`);
+                    return [d.index, esc(d.category), esc(d.userAnswer), esc(d.correctAnswer), d.isCorrect ? '1' : '0', esc(d.explanation)].join(',');
+                });
+                const csv = headers.join(',') + '\n' + rows.join('\n');
+                downloadBlob('exam-results.csv', csv, 'text/csv;charset=utf-8;');
+                alert('Exportado CSV: exam-results.csv');
+            } catch (err) {
+                alert('Error al exportar CSV: ' + err.message);
+            }
+        }
+
+        function copyResults() {
+            if (!navigator.clipboard) {
+                alert('Tu navegador no soporta copiar al portapapeles automáticamente.');
+                return;
+            }
+            try {
+                const json = JSON.stringify(window._examExportData, null, 2);
+                navigator.clipboard.writeText(json).then(() => {
+                    alert('Resultados (JSON) copiados al portapapeles.');
+                }).catch(err => {
+                    alert('No se pudo copiar: ' + err);
+                });
+            } catch (err) {
+                alert('Error al copiar: ' + err.message);
+            }
+        }
+    </script>
+</body>
+
+</html>
