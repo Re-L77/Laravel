@@ -9,7 +9,11 @@ document.addEventListener('DOMContentLoaded', async function () {
         await Sales.loadMaterials();
     } catch (error) {
         console.error('Error initializing data:', error);
+        UI.showToast('Error de Inicialización', 'Hubo un problema al cargar los datos de la aplicación', 'error');
     }
+
+    // Initialize permissions
+    Permissions.initializePermissions();
 
     // Initialize event listeners
     initializeEventListeners();
@@ -29,10 +33,15 @@ function initializeEventListeners() {
         loginForm.addEventListener('submit', Auth.handleLogin);
     }
 
-    // Logout button
+    // Logout buttons (sidebar and header menu)
     const logoutBtn = document.getElementById('logoutBtn');
     if (logoutBtn) {
         logoutBtn.addEventListener('click', Auth.handleLogout);
+    }
+
+    const logoutBtnMenu = document.getElementById('logoutBtnMenu');
+    if (logoutBtnMenu) {
+        logoutBtnMenu.addEventListener('click', Auth.handleLogout);
     }
 
     // Sidebar toggle

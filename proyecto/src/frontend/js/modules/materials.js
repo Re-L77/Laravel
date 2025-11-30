@@ -30,13 +30,22 @@ const Materials = (() => {
 
         filtered.forEach(material => {
             const stockStatus = getStockStatus(material.stock);
+
+            // Asignar icono según categoría
+            let icon = 'fas fa-box';
+            if (material.category === 'Plástico') icon = 'fas fa-bottle-water';
+            else if (material.category === 'Metal') icon = 'fas fa-coins';
+            else if (material.category === 'Vidrio') icon = 'fas fa-wine-glass';
+            else if (material.category === 'Papel') icon = 'fas fa-file';
+
             const card = document.createElement('div');
             card.className = 'col-md-6 col-lg-4';
             card.innerHTML = `
                 <div class="card material-card h-100">
-                    <div class="position-relative">
-                        <img src="${material.image || 'https://via.placeholder.com/400x300?text=' + material.name}" 
-                             class="card-img-top material-image" alt="${material.name}">
+                    <div class="position-relative bg-light" style="height: 200px; display: flex; align-items: center; justify-content: center;">
+                        <div style="text-align: center;">
+                            <i class="${icon}" style="font-size: 4rem; color: var(--emerald-600); margin-bottom: 1rem;"></i>
+                        </div>
                         <span class="badge badge-${material.category?.toLowerCase().replace(/\s+/g, '')} position-absolute top-0 end-0 m-3">
                             ${material.category || 'Otros'}
                         </span>
@@ -50,7 +59,7 @@ const Materials = (() => {
                             </div>
                             <div class="d-flex justify-content-between mb-2">
                                 <span class="text-muted small">Precio por kg:</span>
-                                <span>$${material.price?.toFixed(2) || '0.00'}</span>
+                                <span>$${parseFloat(material.price).toFixed(2)}</span>
                             </div>
                             <div class="progress" style="height: 8px;">
                                 <div class="progress-bar ${stockStatus.barColor}" 
@@ -58,10 +67,10 @@ const Materials = (() => {
                             </div>
                         </div>
                         <div class="d-flex gap-2">
-                            <button class="btn btn-outline-secondary flex-fill" onclick="Materials.edit(${material.id})">
+                            <button class="btn btn-outline-secondary flex-fill" onclick="Materials.edit(${material.id})" ${!Permissions.hasPermission('edit_material') ? 'disabled' : ''}>
                                 <i class="fas fa-edit me-1"></i>Editar
                             </button>
-                            <button class="btn btn-outline-danger flex-fill" onclick="Materials.showDeleteModal(${material.id})">
+                            <button class="btn btn-outline-danger flex-fill" onclick="Materials.showDeleteModal(${material.id})" ${!Permissions.hasPermission('delete_material') ? 'disabled' : ''}>
                                 <i class="fas fa-trash me-1"></i>Eliminar
                             </button>
                         </div>
@@ -104,11 +113,40 @@ const Materials = (() => {
     const add = async (e) => {
         e.preventDefault();
 
+        // Verificar permisos antes de crear
+        if (!Permissions.hasPermission('create_material')) {
+            UI.showToast('Error de permisos', 'No tienes permiso para crear materiales', 'error');
+            return;
+        }
+
+        const name = document.getElementById('addMaterialName').value.trim();
+        const category = document.getElementById('addMaterialType').value;
+        const stock = parseFloat(document.getElementById('addMaterialStock').value);
+        const price = parseFloat(document.getElementById('addMaterialPrice').value);
+
+        // Validaciones
+        if (!name) {
+            UI.showToast('Error de validación', 'El nombre del material es requerido', 'warning');
+            return;
+        }
+        if (!category) {
+            UI.showToast('Error de validación', 'Selecciona una categoría', 'warning');
+            return;
+        }
+        if (isNaN(stock) || stock < 0) {
+            UI.showToast('Error de validación', 'El stock debe ser un número válido', 'warning');
+            return;
+        }
+        if (isNaN(price) || price < 0) {
+            UI.showToast('Error de validación', 'El precio debe ser un número válido', 'warning');
+            return;
+        }
+
         const newMaterial = {
-            name: document.getElementById('addMaterialName').value,
-            category: document.getElementById('addMaterialType').value,
-            stock: parseFloat(document.getElementById('addMaterialStock').value),
-            price: parseFloat(document.getElementById('addMaterialPrice').value)
+            name: name,
+            category: category,
+            stock: stock,
+            price: price
         };
 
         try {
@@ -122,11 +160,18 @@ const Materials = (() => {
             UI.showToast('Material agregado', `${newMaterial.name} ha sido agregado al inventario`, 'success');
         } catch (error) {
             console.error('Error adding material:', error);
-            UI.showToast('Error', 'No se pudo agregar el material', 'error');
+            const errorMessage = error.message || 'No se pudo agregar el material';
+            UI.showToast('Error', errorMessage, 'error');
         }
     };
 
     const edit = (id) => {
+        // Verificar permisos antes de editar
+        if (!Permissions.hasPermission('edit_material')) {
+            UI.showToast('Error de permisos', 'No tienes permiso para editar materiales', 'error');
+            return;
+        }
+
         const material = materials.find(m => m.id === id);
         if (!material) return;
 
@@ -142,14 +187,41 @@ const Materials = (() => {
     const update = async (e) => {
         e.preventDefault();
 
+        // Verificar permisos antes de actualizar
+        if (!Permissions.hasPermission('edit_material')) {
+            UI.showToast('Error de permisos', 'No tienes permiso para editar materiales', 'error');
+            return;
+        }
+
         const id = parseInt(document.getElementById('editMaterialId').value);
-        const name = document.getElementById('editMaterialName').value;
+        const name = document.getElementById('editMaterialName').value.trim();
+        const category = document.getElementById('editMaterialType').value;
+        const stock = parseFloat(document.getElementById('editMaterialStock').value);
+        const price = parseFloat(document.getElementById('editMaterialPrice').value);
+
+        // Validaciones
+        if (!name) {
+            UI.showToast('Error de validación', 'El nombre del material es requerido', 'warning');
+            return;
+        }
+        if (!category) {
+            UI.showToast('Error de validación', 'Selecciona una categoría', 'warning');
+            return;
+        }
+        if (isNaN(stock) || stock < 0) {
+            UI.showToast('Error de validación', 'El stock debe ser un número válido', 'warning');
+            return;
+        }
+        if (isNaN(price) || price < 0) {
+            UI.showToast('Error de validación', 'El precio debe ser un número válido', 'warning');
+            return;
+        }
 
         const updated = {
             name: name,
-            category: document.getElementById('editMaterialType').value,
-            stock: parseFloat(document.getElementById('editMaterialStock').value),
-            price: parseFloat(document.getElementById('editMaterialPrice').value)
+            category: category,
+            stock: stock,
+            price: price
         };
 
         try {
@@ -165,7 +237,8 @@ const Materials = (() => {
             UI.showToast('Material actualizado', `Los cambios en ${name} se han guardado`, 'success');
         } catch (error) {
             console.error('Error updating material:', error);
-            UI.showToast('Error', 'No se pudo actualizar el material', 'error');
+            const errorMessage = error.message || 'No se pudo actualizar el material';
+            UI.showToast('Error', errorMessage, 'error');
         }
     };
 
@@ -179,6 +252,12 @@ const Materials = (() => {
     };
 
     const delete_material = async () => {
+        // Verificar permisos antes de eliminar
+        if (!Permissions.hasPermission('delete_material')) {
+            UI.showToast('Error de permisos', 'No tienes permiso para eliminar materiales', 'error');
+            return;
+        }
+
         try {
             const material = materials.find(m => m.id === deleteTargetId);
             const name = material?.name || 'Material';
@@ -194,9 +273,11 @@ const Materials = (() => {
             bootstrap.Modal.getInstance(document.getElementById('deleteMaterialModal')).hide();
 
             UI.showToast('Material eliminado', `${name} ha sido eliminado del inventario`, 'success');
+            deleteTargetId = null;
         } catch (error) {
             console.error('Error deleting material:', error);
-            UI.showToast('Error', 'No se pudo eliminar el material', 'error');
+            const errorMessage = error.message || 'No se pudo eliminar el material';
+            UI.showToast('Error', errorMessage, 'error');
         }
     };
 

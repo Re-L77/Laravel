@@ -10,6 +10,7 @@ const Sales = (() => {
             populateMaterialSelect();
         } catch (error) {
             console.error('Failed to load materials:', error);
+            UI.showToast('Error', 'No se pudieron cargar los materiales para la venta', 'error');
         }
     };
 
@@ -21,8 +22,9 @@ const Sales = (() => {
         materials.forEach(material => {
             const option = document.createElement('option');
             option.value = material.id;
-            option.textContent = `${material.name} - $${material.price.toFixed(2)}/kg`;
-            option.dataset.price = material.price;
+            const price = parseFloat(material.price);
+            option.textContent = `${material.name} - $${price.toFixed(2)}/kg`;
+            option.dataset.price = price;
             option.dataset.category = material.category;
             select.appendChild(option);
         });
@@ -54,9 +56,12 @@ const Sales = (() => {
             const badgeClass = sale.category === 'Papel' ? 'badge-papel' :
                 sale.category === 'Plástico' ? 'badge-plastico' : 'badge-carton';
 
-            const saleDate = new Date(sale.date);
+            const saleDate = new Date(sale.sale_date);
             const dateStr = saleDate.toLocaleDateString('es-ES');
             const timeStr = saleDate.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
+
+            const totalPrice = parseFloat(sale.total_price || 0);
+            const commission = parseFloat(sale.commission || 0);
 
             const saleEl = document.createElement('div');
             saleEl.className = 'border rounded p-3';
@@ -73,11 +78,11 @@ const Sales = (() => {
                     </div>
                     <div class="col-6 col-md-2">
                         <p class="text-muted small mb-1">COMISIÓN</p>
-                        <p class="mb-0 text-success">$${(sale.commission || 0).toFixed(2)}</p>
+                        <p class="mb-0 text-success">$${commission.toFixed(2)}</p>
                     </div>
                     <div class="col-6 col-md-2">
                         <p class="text-muted small mb-1">TOTAL</p>
-                        <p class="mb-0 text-primary fw-bold">$${sale.total.toFixed(2)}</p>
+                        <p class="mb-0 text-primary fw-bold">$${totalPrice.toFixed(2)}</p>
                     </div>
                     <div class="col-12 col-md-3 text-md-end">
                         <p class="text-muted small mb-1">
@@ -119,8 +124,25 @@ const Sales = (() => {
     const submit = async (e) => {
         e.preventDefault();
 
+        // Verificar permisos antes de crear venta
+        if (!Permissions.hasPermission('create_sale')) {
+            UI.showToast('Error de permisos', 'No tienes permiso para registrar ventas', 'error');
+            return;
+        }
+
         const materialId = document.getElementById('saleMaterial').value;
         const quantity = parseFloat(document.getElementById('saleQuantity').value);
+
+        // Validaciones
+        if (!materialId) {
+            UI.showToast('Error de validación', 'Selecciona un material', 'warning');
+            return;
+        }
+        if (isNaN(quantity) || quantity <= 0) {
+            UI.showToast('Error de validación', 'La cantidad debe ser mayor a 0', 'warning');
+            return;
+        }
+
         const selectedOption = document.getElementById('saleMaterial').options[document.getElementById('saleMaterial').selectedIndex];
         const price = parseFloat(selectedOption.dataset.price);
         const total = quantity * price;
@@ -146,7 +168,8 @@ const Sales = (() => {
             renderRecent();
         } catch (error) {
             console.error('Error registering sale:', error);
-            UI.showToast('Error', 'No se pudo registrar la venta', 'error');
+            const errorMessage = error.message || 'No se pudo registrar la venta';
+            UI.showToast('Error', errorMessage, 'error');
         }
     };
 

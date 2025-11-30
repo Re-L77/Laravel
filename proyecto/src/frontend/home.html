@@ -101,8 +101,18 @@
                         <!-- Demo Credentials -->
                         <div class="alert alert-success bg-opacity-10 border-success">
                             <strong>Credenciales de prueba:</strong><br>
-                            Email: admin@ecocycle.com<br>
-                            Contraseña: admin123
+                            <small class="d-block mb-2">
+                                <strong>Admin:</strong> admin@ecocycle.com
+                            </small>
+                            <small class="d-block mb-2">
+                                <strong>Gerente:</strong> manager@ecocycle.com
+                            </small>
+                            <small class="d-block mb-2">
+                                <strong>Empleado:</strong> employee@ecocycle.com
+                            </small>
+                            <small class="d-block">
+                                <strong>Contraseña (todas):</strong> 123456
+                            </small>
                         </div>
 
                         <div class="text-center text-muted small mt-4">
@@ -174,12 +184,28 @@
                     </div>
                     <div class="d-flex align-items-center gap-3">
                         <div class="text-end d-none d-md-block">
-                            <p class="mb-0 small fw-bold">Usuario Admin</p>
+                            <p class="mb-0 small fw-bold" id="userName">Usuario Admin</p>
                             <p class="mb-0 small text-muted" id="userEmail">admin@ecocycle.com</p>
+                            <p class="mb-0 small" id="userRole" style="color: var(--emerald-600); font-weight: 600;">
+                                Administrador</p>
                         </div>
-                        <div class="rounded-circle text-white d-flex align-items-center justify-center fw-bold"
-                            style="width: 40px; height: 40px; background: linear-gradient(to bottom right, var(--emerald-400), var(--emerald-600));">
-                            UA
+                        <div class="dropdown">
+                            <button
+                                class="rounded-circle text-white d-flex align-items-center justify-center fw-bold border-0"
+                                style="width: 40px; height: 40px; background: linear-gradient(to bottom right, var(--emerald-400), var(--emerald-600)); cursor: pointer;"
+                                id="userMenuBtn" data-bs-toggle="dropdown">
+                                UA
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userMenuBtn">
+                                <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i>Mi Perfil</a></li>
+                                <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i>Configuración</a>
+                                </li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li><a class="dropdown-item text-danger" id="logoutBtnMenu" href="#"><i
+                                            class="fas fa-sign-out-alt me-2"></i>Cerrar Sesión</a></li>
+                            </ul>
                         </div>
                     </div>
                 </div>
@@ -749,6 +775,7 @@
 
     <!-- Modules -->
     <script src="js/modules/auth.js"></script>
+    <script src="js/modules/permissions.js"></script>
     <script src="js/modules/charts.js"></script>
     <script src="js/modules/materials.js"></script>
     <script src="js/modules/sales.js"></script>

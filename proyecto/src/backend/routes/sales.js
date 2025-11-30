@@ -3,8 +3,8 @@ const router = express.Router();
 const SaleController = require('../controllers/SaleController');
 
 // GET
-router.get('/statistics', SaleController.getStatistics);
 router.get('/recent/:limit', SaleController.getRecentSales);
+router.get('/statistics', SaleController.getStatistics);
 router.get('/range', SaleController.getSalesByDateRange);
 router.get('/:id', SaleController.getSaleById);
 router.get('/', SaleController.getAllSales);

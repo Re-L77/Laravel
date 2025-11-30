@@ -46,7 +46,7 @@ class SaleController {
   // GET /api/sales/recent/:limit - Obtener ventas recientes
   static async getRecentSales(req, res) {
     try {
-      const limit = req.params.limit || 10;
+      const limit = parseInt(req.params.limit) || 10;
       const sales = await Sale.getRecent(limit);
       res.json({
         success: true,
@@ -54,9 +54,11 @@ class SaleController {
         count: sales.length
       });
     } catch (error) {
+      console.error('Error getting recent sales:', error);
       res.status(500).json({
         success: false,
-        error: error.message
+        error: 'Error al obtener ventas recientes',
+        details: error.message
       });
     }
   }

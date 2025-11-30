@@ -47,6 +47,7 @@ class Sale {
   static async getRecent(limit = 10) {
     try {
       const connection = await pool.getConnection();
+      const limitValue = Math.max(1, Math.min(parseInt(limit) || 10, 1000)); // Entre 1 y 1000
       const [rows] = await connection.query(`
         SELECT 
           s.id, s.material_id, s.quantity, s.unit_price,
@@ -56,8 +57,8 @@ class Sale {
         LEFT JOIN materials m ON s.material_id = m.id
         WHERE s.status = 'completed'
         ORDER BY s.sale_date DESC
-        LIMIT ?
-      `, [limit]);
+        LIMIT ${limitValue}
+      `);
       connection.release();
       return rows;
     } catch (error) {

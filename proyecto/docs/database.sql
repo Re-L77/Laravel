@@ -75,15 +75,17 @@ CREATE TABLE IF NOT EXISTS reports (
 
 -- Insertar usuario por defecto
 INSERT INTO users (name, email, password, role) VALUES
-('Admin EcoCycle', 'admin@ecocycle.com', '123456', 'admin');
+('Admin EcoCycle', 'admin@ecocycle.com', '123456', 'admin'),
+('Gerente Operaciones', 'manager@ecocycle.com', '123456', 'manager'),
+('Empleado Reciclaje', 'employee@ecocycle.com', '123456', 'employee');
 
 -- Insertar datos de ejemplo
 INSERT INTO materials (name, category, description, price, stock, unit, image_url) VALUES
-('Plástico PET', 'Plástico', 'Botellas y envases de plástico PET', 2.50, 1000, 'kg', 'https://via.placeholder.com/150?text=PET'),
-('Aluminio', 'Metal', 'Latas y residuos de aluminio', 5.00, 500, 'kg', 'https://via.placeholder.com/150?text=Aluminio'),
-('Vidrio', 'Vidrio', 'Botellas y envases de vidrio', 1.50, 750, 'kg', 'https://via.placeholder.com/150?text=Vidrio'),
-('Papel', 'Papel', 'Papel blanco y periódico', 0.75, 1200, 'kg', 'https://via.placeholder.com/150?text=Papel'),
-('Cartón', 'Papel', 'Cajas y cartón corrugado', 1.00, 900, 'kg', 'https://via.placeholder.com/150?text=Carton');
+('Plástico PET', 'Plástico', 'Botellas y envases de plástico PET', 2.50, 1000, 'kg', 'https://images.unsplash.com/photo-1578500494198-246f612d03b3?w=400&h=300&fit=crop'),
+('Aluminio', 'Metal', 'Latas y residuos de aluminio', 5.00, 500, 'kg', 'https://images.unsplash.com/photo-1578894381726-3e3d3f0b8cd2?w=400&h=300&fit=crop'),
+('Vidrio', 'Vidrio', 'Botellas y envases de vidrio', 1.50, 750, 'kg', 'https://images.unsplash.com/photo-1578502494516-5c959c65a0a0?w=400&h=300&fit=crop'),
+('Papel', 'Papel', 'Papel blanco y periódico', 0.75, 1200, 'kg', 'https://images.unsplash.com/photo-1558769132-cb1aea458c5e?w=400&h=300&fit=crop'),
+('Cartón', 'Papel', 'Cajas y cartón corrugado', 1.00, 900, 'kg', 'https://images.unsplash.com/photo-1611273426858-450d8e3c9fce?w=400&h=300&fit=crop');
 
 -- Insertar transacciones de ejemplo
 INSERT INTO transactions (material_id, type, quantity, price, description) VALUES
