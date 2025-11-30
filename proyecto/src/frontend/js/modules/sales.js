@@ -1,48 +1,91 @@
 // Sales Module
 const Sales = (() => {
-    const salesData = [
-        { id: 1, material: 'Papel Bond Blanco', type: 'Papel', quantity: 150, price: 1.50, total: 225, customer: 'Empresa ABC', date: '2024-11-14', time: '10:30' },
-        { id: 2, material: 'Plástico PET', type: 'Plástico', quantity: 200, price: 2.00, total: 400, customer: 'Industrias XYZ', date: '2024-11-13', time: '14:15' },
-        { id: 3, material: 'Cartón Corrugado', type: 'Cartón', quantity: 300, price: 1.20, total: 360, customer: 'Recicladora Norte', date: '2024-11-13', time: '09:45' }
-    ];
+    let salesData = [];
+    let materials = [];
 
-    const renderRecent = () => {
+    const loadMaterials = async () => {
+        try {
+            const response = await API.materials.getAll();
+            materials = response.data || [];
+            populateMaterialSelect();
+        } catch (error) {
+            console.error('Failed to load materials:', error);
+        }
+    };
+
+    const populateMaterialSelect = () => {
+        const select = document.getElementById('saleMaterial');
+        if (!select) return;
+
+        select.innerHTML = '<option value="">Selecciona un material...</option>';
+        materials.forEach(material => {
+            const option = document.createElement('option');
+            option.value = material.id;
+            option.textContent = `${material.name} - $${material.price.toFixed(2)}/kg`;
+            option.dataset.price = material.price;
+            option.dataset.category = material.category;
+            select.appendChild(option);
+        });
+    };
+
+    const renderRecent = async () => {
+        try {
+            const response = await API.sales.getRecent(10);
+            salesData = response.data || [];
+            displaySales();
+        } catch (error) {
+            console.error('Failed to load recent sales:', error);
+            UI.showToast('Error', 'No se pudieron cargar las ventas recientes', 'error');
+        }
+    };
+
+    const displaySales = () => {
         const container = document.getElementById('recentSales');
+        if (!container) return;
+
         container.innerHTML = '';
-        
+
+        if (salesData.length === 0) {
+            container.innerHTML = '<p class="text-muted text-center p-3">No hay ventas registradas</p>';
+            return;
+        }
+
         salesData.forEach(sale => {
-            const badgeClass = sale.type === 'Papel' ? 'badge-papel' : 
-                              sale.type === 'Plástico' ? 'badge-plastico' : 'badge-carton';
-            
+            const badgeClass = sale.category === 'Papel' ? 'badge-papel' :
+                sale.category === 'Plástico' ? 'badge-plastico' : 'badge-carton';
+
+            const saleDate = new Date(sale.date);
+            const dateStr = saleDate.toLocaleDateString('es-ES');
+            const timeStr = saleDate.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
+
             const saleEl = document.createElement('div');
             saleEl.className = 'border rounded p-3';
             saleEl.innerHTML = `
                 <div class="row g-3">
                     <div class="col-6 col-md-3">
                         <p class="text-muted small mb-1">MATERIAL</p>
-                        <p class="mb-1">${sale.material}</p>
-                        <span class="badge ${badgeClass}">${sale.type}</span>
+                        <p class="mb-1">${sale.material_name || 'Sin nombre'}</p>
+                        <span class="badge ${badgeClass}">${sale.category || 'Otros'}</span>
                     </div>
                     <div class="col-6 col-md-2">
                         <p class="text-muted small mb-1">CANTIDAD</p>
                         <p class="mb-0">${sale.quantity} kg</p>
                     </div>
                     <div class="col-6 col-md-2">
+                        <p class="text-muted small mb-1">COMISIÓN</p>
+                        <p class="mb-0 text-success">$${(sale.commission || 0).toFixed(2)}</p>
+                    </div>
+                    <div class="col-6 col-md-2">
                         <p class="text-muted small mb-1">TOTAL</p>
-                        <p class="mb-0 text-success">$${sale.total.toFixed(2)}</p>
+                        <p class="mb-0 text-primary fw-bold">$${sale.total.toFixed(2)}</p>
                     </div>
-                    <div class="col-6 col-md-3">
-                        <p class="text-muted small mb-1">CLIENTE</p>
-                        <p class="mb-0">${sale.customer}</p>
-                    </div>
-                    <div class="col-12 col-md-2 text-md-end">
+                    <div class="col-12 col-md-3 text-md-end">
                         <p class="text-muted small mb-1">
-                            <i class="fas fa-calendar me-1"></i>${sale.date}
+                            <i class="fas fa-calendar me-1"></i>${dateStr}
                         </p>
                         <p class="text-muted small mb-1">
-                            <i class="fas fa-clock me-1"></i>${sale.time}
+                            <i class="fas fa-clock me-1"></i>${timeStr}
                         </p>
-                        <button class="btn btn-sm btn-outline-secondary mt-2">Ver Detalles</button>
                     </div>
                 </div>
             `;
@@ -51,49 +94,64 @@ const Sales = (() => {
     };
 
     const updateCalculations = () => {
-        const material = document.getElementById('saleMaterial').value;
+        const materialSelect = document.getElementById('saleMaterial');
         const quantity = parseFloat(document.getElementById('saleQuantity').value) || 0;
-        
-        const prices = {
-            'papel': 1.50,
-            'plastico': 2.00,
-            'carton': 1.20
-        };
-        
-        const types = {
-            'papel': '<span class="badge badge-papel">Papel</span>',
-            'plastico': '<span class="badge badge-plastico">Plástico</span>',
-            'carton': '<span class="badge badge-carton">Cartón</span>'
-        };
-        
-        if (material) {
-            const price = prices[material];
+
+        if (materialSelect && materialSelect.value) {
+            const selectedOption = materialSelect.options[materialSelect.selectedIndex];
+            const price = parseFloat(selectedOption.dataset.price);
+            const category = selectedOption.dataset.category;
             const total = quantity * price;
-            
-            document.getElementById('saleType').innerHTML = types[material];
+            const commission = total * 0.1; // 10% commission
+
+            document.getElementById('saleType').innerHTML = `<span class="badge badge-${category.toLowerCase()}">${category}</span>`;
             document.getElementById('salePrice').textContent = `$${price.toFixed(2)}`;
             document.getElementById('saleTotal').textContent = `$${total.toFixed(2)}`;
+            document.getElementById('saleCommission').textContent = `$${commission.toFixed(2)}`;
         } else {
-            document.getElementById('saleType').textContent = 'Auto-completado';
+            document.getElementById('saleType').textContent = 'Selecciona material';
             document.getElementById('salePrice').textContent = '$0.00';
             document.getElementById('saleTotal').textContent = '$0.00';
+            document.getElementById('saleCommission').textContent = '$0.00';
         }
     };
 
-    const submit = (e) => {
+    const submit = async (e) => {
         e.preventDefault();
-        
-        const material = document.getElementById('saleMaterial').value;
-        const quantity = document.getElementById('saleQuantity').value;
-        const total = document.getElementById('saleTotal').textContent;
-        
-        UI.showToast('Venta registrada exitosamente', `${quantity}kg de ${material} por ${total}`, 'success');
-        
-        e.target.reset();
-        updateCalculations();
+
+        const materialId = document.getElementById('saleMaterial').value;
+        const quantity = parseFloat(document.getElementById('saleQuantity').value);
+        const selectedOption = document.getElementById('saleMaterial').options[document.getElementById('saleMaterial').selectedIndex];
+        const price = parseFloat(selectedOption.dataset.price);
+        const total = quantity * price;
+
+        const saleData = {
+            material_id: parseInt(materialId),
+            quantity: quantity,
+            price: price,
+            total: total
+        };
+
+        try {
+            const response = await API.sales.create(saleData);
+            salesData.unshift(response.data);
+
+            const material = materials.find(m => m.id === parseInt(materialId));
+            const materialName = material ? material.name : 'Material';
+
+            UI.showToast('Venta registrada', `${quantity}kg de ${materialName} por $${total.toFixed(2)}`, 'success');
+
+            e.target.reset();
+            updateCalculations();
+            renderRecent();
+        } catch (error) {
+            console.error('Error registering sale:', error);
+            UI.showToast('Error', 'No se pudo registrar la venta', 'error');
+        }
     };
 
     return {
+        loadMaterials,
         renderRecent,
         updateCalculations,
         submit

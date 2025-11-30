@@ -544,16 +544,21 @@
                                                 Cantidad y Precio
                                             </h6>
                                             <div class="row g-3">
-                                                <div class="col-md-4">
+                                                <div class="col-md-3">
                                                     <label class="form-label">Cantidad (kg)</label>
                                                     <input type="number" class="form-control" id="saleQuantity"
                                                         placeholder="0" min="0" step="0.01" required>
                                                 </div>
-                                                <div class="col-md-4">
+                                                <div class="col-md-3">
                                                     <label class="form-label">Precio por kg</label>
                                                     <div class="form-control bg-light" id="salePrice">$0.00</div>
                                                 </div>
-                                                <div class="col-md-4">
+                                                <div class="col-md-3">
+                                                    <label class="form-label">Comisión (10%)</label>
+                                                    <div class="form-control bg-light text-info" id="saleCommission">
+                                                        $0.00</div>
+                                                </div>
+                                                <div class="col-md-3">
                                                     <label class="form-label">Total a Pagar</label>
                                                     <div class="form-control border-success bg-success bg-opacity-10 text-success fw-bold"
                                                         id="saleTotal">$0.00</div>
@@ -738,6 +743,9 @@
 
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.js"></script>
+
+    <!-- API Service -->
+    <script src="js/api.js"></script>
 
     <!-- Modules -->
     <script src="js/modules/auth.js"></script>

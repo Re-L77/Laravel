@@ -1,9 +1,15 @@
 // EcoCycle - Main Application
 // Initialize app on DOM load
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', async function () {
     // Initialize data
     Auth.checkAuth();
-    Materials.initialize();
+
+    try {
+        await Materials.initialize();
+        await Sales.loadMaterials();
+    } catch (error) {
+        console.error('Error initializing data:', error);
+    }
 
     // Initialize event listeners
     initializeEventListeners();
@@ -18,13 +24,22 @@ document.addEventListener('DOMContentLoaded', function () {
 // Initialize all event listeners
 function initializeEventListeners() {
     // Login form
-    document.getElementById('loginForm').addEventListener('submit', Auth.handleLogin);
+    const loginForm = document.getElementById('loginForm');
+    if (loginForm) {
+        loginForm.addEventListener('submit', Auth.handleLogin);
+    }
 
     // Logout button
-    document.getElementById('logoutBtn').addEventListener('click', Auth.handleLogout);
+    const logoutBtn = document.getElementById('logoutBtn');
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', Auth.handleLogout);
+    }
 
     // Sidebar toggle
-    document.getElementById('toggleSidebar').addEventListener('click', UI.toggleSidebar);
+    const toggleBtn = document.getElementById('toggleSidebar');
+    if (toggleBtn) {
+        toggleBtn.addEventListener('click', UI.toggleSidebar);
+    }
 
     // Navigation buttons
     document.querySelectorAll('.nav-button[data-screen]').forEach(btn => {
@@ -47,21 +62,36 @@ function initializeEventListeners() {
     }
 
     // Add material form
-    document.getElementById('addMaterialForm').addEventListener('submit', Materials.add);
+    const addForm = document.getElementById('addMaterialForm');
+    if (addForm) {
+        addForm.addEventListener('submit', Materials.add);
+    }
 
     // Edit material form
-    document.getElementById('editMaterialForm').addEventListener('submit', Materials.update);
+    const editForm = document.getElementById('editMaterialForm');
+    if (editForm) {
+        editForm.addEventListener('submit', Materials.update);
+    }
 
     // Delete material confirmation
-    document.getElementById('confirmDeleteBtn').addEventListener('click', () => Materials.delete());
+    const deleteBtn = document.getElementById('confirmDeleteBtn');
+    if (deleteBtn) {
+        deleteBtn.addEventListener('click', () => Materials.delete());
+    }
 
     // Sales form
-    document.getElementById('salesForm').addEventListener('submit', Sales.submit);
-    document.getElementById('saleMaterial').addEventListener('change', Sales.updateCalculations);
-    document.getElementById('saleQuantity').addEventListener('input', Sales.updateCalculations);
+    const salesForm = document.getElementById('salesForm');
+    if (salesForm) {
+        salesForm.addEventListener('submit', Sales.submit);
+    }
 
-    // Initialize sales screen
-    setTimeout(() => {
-        Sales.renderRecent();
-    }, 500);
+    const saleMaterial = document.getElementById('saleMaterial');
+    if (saleMaterial) {
+        saleMaterial.addEventListener('change', Sales.updateCalculations);
+    }
+
+    const saleQuantity = document.getElementById('saleQuantity');
+    if (saleQuantity) {
+        saleQuantity.addEventListener('input', Sales.updateCalculations);
+    }
 }
