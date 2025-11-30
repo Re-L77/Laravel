@@ -9,19 +9,22 @@
 - [Características](#características)
 - [Estructura del Proyecto](#estructura-del-proyecto)
 - [Stack Tecnológico](#stack-tecnológico)
+- [Credenciales de Prueba](#credenciales-de-prueba)
 - [Cómo Funciona](#cómo-funciona)
 - [Módulos](#módulos)
-- [Instalación y Uso](#instalación-y-uso)
-- [Flujo de Datos](#flujo-de-datos)
+- [Sistema de Permisos](#sistema-de-permisos)
 - [Almacenamiento](#almacenamiento)
 - [Arquitectura](#arquitectura)
+- [Interfaz de Usuario](#interfaz-de-usuario)
+- [Instalación y Uso](#instalación-y-uso)
 - [Notas de Seguridad](#notas-de-seguridad)
 
 ---
 
 ## ✨ Características
 
-✅ **Autenticación**: Sistema simple de login con validación  
+✅ **Autenticación**: Sistema de login con validación  
+✅ **Sistema de Permisos**: Tres roles con permisos diferenciados (Admin, Gerente, Empleado)  
 ✅ **Dashboard**: Panel de control con métricas y gráficos interactivos  
 ✅ **Gestión de Materiales**: CRUD completo (Crear, Leer, Actualizar, Eliminar)  
 ✅ **Registro de Ventas**: Cálculo automático de totales y comisiones  
@@ -38,30 +41,35 @@
 ```
 proyecto/
 │
-├── index.html                 # Archivo principal (HTML puro)
+├── index.html                 # Archivo principal con toda la app
+├── home.html                  # Archivo de bienvenida y login
 │
 ├── css/
 │   └── styles.css            # Estilos globales (250 líneas)
 │
 ├── js/
 │   ├── main.js               # Orquestador (punto de entrada)
+│   ├── api.js                # Cliente API para backend
 │   └── modules/
 │       ├── auth.js           # Autenticación y login
 │       ├── charts.js         # Gráficos (Chart.js)
 │       ├── materials.js      # CRUD de materiales
 │       ├── sales.js          # Gestión de ventas
+│       ├── permissions.js    # Control de permisos por roles
 │       └── ui.js             # Interfaz de usuario
 │
 ├── screens/
-│   ├── login.html            # (referencia - contenido en index.html)
-│   ├── dashboard.html        # (referencia - contenido en index.html)
-│   ├── materials.html        # (referencia - contenido en index.html)
-│   └── sales.html            # (referencia - contenido en index.html)
+│   ├── dashboard.html        # Pantalla de dashboard
+│   ├── materials.html        # Pantalla de gestión de materiales
+│   └── sales.html            # Pantalla de registro de ventas
 │
 ├── assets/
 │   └── rec.png               # Imagen para sección ambiental
 │
-└── README.md                 # Este archivo
+├── database.sql              # Esquema y datos iniciales de la BD
+├── README.md                 # Documentación (este archivo)
+├── package.json              # Dependencias del proyecto
+└── .env                      # Variables de entorno (BD, puertos, etc)
 ```
 
 ---
@@ -100,8 +108,20 @@ Usuario abre app (index.html)
 
 ### Credenciales de Prueba
 
+**Administrador**:
 - **Email**: `admin@ecocycle.com`
-- **Contraseña**: `admin123`
+- **Contraseña**: `123456`
+- **Permisos**: Acceso completo a todas las funciones
+
+**Gerente**:
+- **Email**: `manager@ecocycle.com`
+- **Contraseña**: `123456`
+- **Permisos**: Ver/crear/editar materiales, ventas y reportes (sin eliminar)
+
+**Empleado**:
+- **Email**: `employee@ecocycle.com`
+- **Contraseña**: `123456`
+- **Permisos**: Ver materiales y crear/ver ventas solo
 
 ---
 
@@ -273,6 +293,57 @@ UI.navigateToScreen('materials');
 // Alternar sidebar en móvil
 UI.toggleSidebar();
 ```
+
+---
+
+## 🔐 Sistema de Permisos (`permissions.js`)
+
+**Responsabilidad**: Control de acceso basado en roles de usuario
+
+### Tres Roles Disponibles
+
+**1. Administrador**
+- Permisos: Vista de dashboard, crear/editar/eliminar materiales, ver/crear ventas, ver reportes, gestionar usuarios
+- Acceso completo a todas las funciones
+
+**2. Gerente**
+- Permisos: Vista de dashboard, crear/editar materiales (no eliminar), ver/crear ventas, ver reportes
+- Sin acceso a gestión de usuarios
+
+**3. Empleado**
+- Permisos: Ver materiales (no crear/editar/eliminar), ver/crear ventas
+- Sin acceso a dashboard ni reportes
+
+### Métodos Públicos
+
+- `getCurrentUser()` - Retorna objeto del usuario actual
+- `getCurrentRole()` - Retorna rol del usuario ('admin', 'manager', 'employee')
+- `hasPermission(permission)` - Verifica si usuario tiene permiso específico
+- `hasAnyPermission(permissions)` - Verifica si tiene al menos uno de los permisos
+- `hasAllPermissions(permissions)` - Verifica si tiene todos los permisos
+- `restrictElement(elementId, permission)` - Oculta elemento si no tiene permiso
+- `restrictButton(buttonId, permission)` - Deshabilita botón si no tiene permiso
+- `initializePermissions()` - Aplica restricciones de permisos al cargar la página
+
+### Implementación
+
+Los permisos se verifican en dos niveles:
+
+1. **Nivel UI**: Se ocultan/deshabilan elementos según permisos
+   ```javascript
+   // Botones Editar y Eliminar en Materiales
+   <button onclick="Materials.edit(${material.id})" 
+           ${!Permissions.hasPermission('edit_material') ? 'disabled' : ''}>
+   ```
+
+2. **Nivel Función**: Se valida antes de ejecutar acción
+   ```javascript
+   // En Materials.add()
+   if (!Permissions.hasPermission('create_material')) {
+       UI.showToast('Error', 'No tienes permiso para crear materiales', 'error');
+       return;
+   }
+   ```
 
 ---
 
@@ -623,52 +694,72 @@ Bootstrap 5 breakpoints utilizados:
 
 ### Requisitos
 
-- Navegador moderno (Chrome, Firefox, Safari, Edge)
-- Servidor HTTP (local o remoto)
+- Node.js v14+ 
+- MariaDB/MySQL
+- Navegador moderno
 
-### Instalación Local
+### Configuración Inicial
 
-**Opción 1: Servidor local simple**
-
-```bash
-# Con Python 3
-cd /home/teto/dev/Laravel/proyecto
-python -m http.server 8000
-
-# Luego abre en navegador:
-# http://localhost:8000
-```
-
-**Opción 2: Con Node.js**
+**1. Clonar y configurar el repositorio**
 
 ```bash
 cd /home/teto/dev/Laravel/proyecto
-npx http-server
+npm install
 ```
 
-**Opción 3: Usar Live Server en VS Code**
+**2. Configurar base de datos**
 
-1. Instala extensión "Live Server"
-2. Click derecho en `index.html`
-3. Selecciona "Open with Live Server"
+```bash
+# Crear usuario en MariaDB
+mariadb -u root -p
+> CREATE USER 'ecocycle'@'localhost' IDENTIFIED BY 'ecocycle123';
+> GRANT ALL ON ecocycle.* TO 'ecocycle'@'localhost';
 
-### Uso
+# Ejecutar script de BD
+mariadb -u ecocycle -pecocycle123 < database.sql
+```
 
-1. **Primera vez**:
-   - Abre `index.html`
-   - Login con: `admin@ecocycle.com` / `admin123`
-   - Sistema crea datos de ejemplo
+**3. Iniciar el servidor backend**
 
-2. **Navegar**:
-   - Usa sidebar o botones de acceso rápido
-   - Dashboard muestra resumen y gráficos
-   - Materiales para CRUD
-   - Ventas para registrar transacciones
+```bash
+npm start
+# Backend disponible en http://localhost:3000
+```
 
-3. **Datos persistentes**:
-   - Todos los cambios se guardan automáticamente
-   - Recarga la página sin perder datos
-   - Limpia localStorage para resetear: `localStorage.clear()`
+**4. Iniciar el servidor frontend**
+
+```bash
+# En otra terminal
+cd src/frontend
+python -m http.server 8081
+# Frontend disponible en http://localhost:8081
+```
+
+**5. Abrir la aplicación**
+
+```
+http://localhost:8081/home.html
+```
+
+### Credenciales de Prueba para Login
+
+- **Admin**: admin@ecocycle.com / 123456
+- **Gerente**: manager@ecocycle.com / 123456
+- **Empleado**: employee@ecocycle.com / 123456
+
+### Uso del Sistema
+
+1. **Login** → Ingresa con una de las credenciales de prueba
+2. **Dashboard** → Visualiza métricas y gráficos
+3. **Materiales** → Gestiona inventario (CRUD)
+4. **Ventas** → Registra transacciones
+5. **Logout** → Cierra sesión
+
+### Restricciones por Rol
+
+**Admin**: Acceso completo a todo
+**Gerente**: Puede crear/editar materiales, NO eliminar
+**Empleado**: Solo puede ver materiales y crear ventas
 
 ---
 
@@ -802,16 +893,20 @@ case 'reports':
 - ✅ Gráficos interactivos
 - ✅ Interfaz responsive
 - ✅ Sistema de notificaciones
+- ✅ Backend con Express.js y MariaDB
+- ✅ API RESTful completa
+- ✅ Sistema de permisos (3 roles: Admin, Gerente, Empleado)
+- ✅ Múltiples usuarios con autenticación real
 
 ### Mejoras Futuras (v2.0)
-- [ ] Backend con base de datos
-- [ ] Autenticación real (JWT)
+- [ ] Autenticación con JWT tokens
 - [ ] Reportes avanzados (PDF, Excel)
-- [ ] Usuarios múltiples con roles
 - [ ] Exportación de datos
 - [ ] Gráficos más complejos
 - [ ] Filtros avanzados
 - [ ] Integración con APIs externas
+- [ ] Dashboard personalizado por rol
+- [ ] Auditoría de cambios
 
 ---
 
